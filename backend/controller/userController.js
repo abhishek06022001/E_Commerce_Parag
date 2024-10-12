@@ -5,13 +5,9 @@ const Op = db.Sequelize.Op;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
-const cloudinary = require("cloudinary").v2;
+
 const bodyParser = require("body-parser");
-cloudinary.config({
-  cloud_name: "dvly2e0ir",
-  api_key: "337169325583842",
-  api_secret: "KjD3gGWrAFfBm9j0eypQCTLswxw",
-});
+const fs = require("fs");
 
 const userController = {
   // user basic login logout register
@@ -63,7 +59,7 @@ const userController = {
             id: user.id,
           };
           const token = jwt.sign(payload, "JWT_SECRET_KEY", {
-            expiresIn: "3h",
+            expiresIn: "12h",
           });
           return res.status(200).json({
             success: true,
@@ -84,13 +80,16 @@ const userController = {
   test: async (req, res) => {
     return res.send("This is a test route");
   },
-
   // create user by admin
+
   create_user: async (req, res) => {
     try {
-      const pass = req.body.password ? req.body.password : "root";
-      const hashedPassword = await bcrypt.hash(pass, 10);
-      let newUser = { ...req.body, password: hashedPassword };
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      let newUser = {
+        ...req.body,
+        password: hashedPassword,
+        image: req.file.filename,
+      };
       const is_duplicate = await Users.findOne({
         where: { email: req.body.email },
       });
@@ -102,7 +101,6 @@ const userController = {
       const user = await Users.create(newUser);
       newUser = { ...newUser, user_id: user.id };
       await UserInfo.create(newUser);
-
       return res.status(200).json({ msg: "SuccessFully created" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
@@ -173,17 +171,13 @@ const userController = {
     try {
       const id = req.params.id;
       await Users.update({ is_deleted: 1 }, { where: { id: id } });
-
-      return res.status(200).json({ msg: "updated successFully" });
+      return res
+        .status(200)
+        .json({ success: true, msg: "deleted successFully" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
   },
 };
-const uploadImage = (req, res) => {
-  return "uploadImage";
-};
-const editImage = (req, res) => {
-  return "editImage";
-};
+
 module.exports = userController;
