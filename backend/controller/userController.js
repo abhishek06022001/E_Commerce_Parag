@@ -4,11 +4,8 @@ const UserInfo = db.user_info;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { where } = require("sequelize");
-
-const bodyParser = require("body-parser");
 const fs = require("fs");
-
+const { where } = require("sequelize");
 const userController = {
   // user basic login logout register
   register: async (req, res) => {
@@ -28,7 +25,6 @@ const userController = {
         password: hashedPassword,
       });
       const reg_user = await newUser.save();
-
       await UserInfo.create({
         ...req.body,
         password: hashedPassword,
@@ -81,7 +77,6 @@ const userController = {
     return res.send("This is a test route");
   },
   // create user by admin
-
   create_user: async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -110,26 +105,19 @@ const userController = {
   update_user: async (req, res) => {
     try {
       const id = req.params.id;
-      const { name, image, age, dob, address } = req.body;
-      let userInfoUpdateData = {};
-      let usersUpdateData = {};
-      if (image) userInfoUpdateData.image = image;
-      if (name) {
-        userInfoUpdateData.name = name;
-        usersUpdateData.name = name;
-      }
-      if (age) userInfoUpdateData.age = age;
-      if (dob) userInfoUpdateData.dob = dob;
-      if (address) userInfoUpdateData.address = address;
-      await UserInfo.update(userInfoUpdateData, {
+      const user_obj = await UserInfo.findOne({
         where: { user_id: id },
       });
-      await Users.update(usersUpdateData, {
-        where: {
-          id: id,
-        },
-      });
-      return res.status(200).json({ msg: "User Updated SuccessFully" });
+      const user = await Users.findByPk(id);
+      if (req.file) {
+        fs.unlink(process.cwd()+"/uploads/"+user_obj.image, (err) => {
+          if (err) throw err;
+        });
+        req.body.image = req.file.filename;
+      }
+      await Users.update({ ...req.body }, { where: { id: id } });
+      await UserInfo.update({ ...req.body }, { where: { user_id: id } });
+      return res.status(200).json({ msg: "updated success" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

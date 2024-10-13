@@ -1,0 +1,33 @@
+
+my sample  submitted options after pressing checkout 
+{
+  "products": [
+    {
+      "product_id": "12345",
+      "quantity": 2
+    },
+    {
+      "product_id": "67890",
+      "quantity": 1
+    }
+  ],
+  "user_id": "abc123",
+}
+
+      let newUser = {
+        ...req.body,
+        password: hashedPassword,
+        image: req.file.filename,
+      };
+      const is_duplicate = await Users.findOne({
+        where: { email: req.body.email },
+      });
+      if (is_duplicate) {
+        return res
+          .status(400)
+          .json({ msg: "User Already exists for the email" });
+      }
+      const user = await Users.create(newUser);
+      newUser = { ...newUser, user_id: user.id };
+      await UserInfo.create(newUser);
+      return res.status(200).json({ msg: "SuccessFully created" });

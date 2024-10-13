@@ -13,8 +13,7 @@ router.post(
   upload.single("file"),
   users.create_user
 );
-router.put("/update_user/:id", auth, users.update_user);
-
+router.put("/update_user/:id", auth, upload.single("file"), users.update_user);
 router.get("/get_user/:id", auth, users.get_user_byId);
 router.get("/get_users/", auth, authorization, users.get_users);
 router.delete("/delete_user/:id", auth, authorization, users.delete_user);
