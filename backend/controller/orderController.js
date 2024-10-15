@@ -38,20 +38,23 @@ const orderController = {
         },
       });
       //   must do await because it is still a promise dude
-      let orders_bycategory = await orders.reduce(async (acc, product) => {
-        const acc = await accpromise;
-        if (!acc[product.order_id]) {
-          acc[product.order_id] = [];
-        }
-        const prod = await Product.findOne({
-          where: { id: product.product_id },
-        });
-        acc[product.order_id].push({
-          ...prod.dataValues,
-          quantity: product.quantity,
-        });
-        return acc;
-      }, {});
+      let orders_bycategory = await orders.reduce(
+        async (accpromise, product) => {
+          const acc = await accpromise;
+          if (!acc[product.order_id]) {
+            acc[product.order_id] = [];
+          }
+          const prod = await Product.findOne({
+            where: { id: product.product_id },
+          });
+          acc[product.order_id].push({
+            ...prod.dataValues,
+            quantity: product.quantity,
+          });
+          return acc;
+        },
+        {}
+      );
 
       return res.status(200).json({ success: true, msg: orders_bycategory });
     } catch (error) {

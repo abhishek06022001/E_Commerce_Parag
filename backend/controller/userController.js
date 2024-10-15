@@ -110,7 +110,7 @@ const userController = {
       });
       const user = await Users.findByPk(id);
       if (req.file) {
-        fs.unlink(process.cwd()+"/uploads/"+user_obj.image, (err) => {
+        fs.unlink(process.cwd() + "/uploads/" + user_obj.image, (err) => {
           if (err) throw err;
         });
         req.body.image = req.file.filename;
@@ -143,6 +143,7 @@ const userController = {
       const user = await Users.findByPk(id, { where: { is_deleted: 0 } });
       const user_same = await UserInfo.findOne({ where: { user_id: id } });
       const user_information = {
+        role: user.role,
         name: user.name,
         email: user.email,
         address: user_same.address,
