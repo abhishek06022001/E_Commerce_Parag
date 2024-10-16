@@ -35,7 +35,7 @@ function Login() {
             setTimeout(() => {
                 setLoading(false);
                 navigate('/');
-            }, 1500);
+            }, 1000);
         } catch (error) {
             console.log(error.message);
             setInput({ email: '', password: '' });
