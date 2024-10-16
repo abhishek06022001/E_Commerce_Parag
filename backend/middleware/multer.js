@@ -4,7 +4,12 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    cb(null, Math.floor(Math.random() * 1000000) + "-" + file.originalname);
+    cb(
+      null,
+      Math.floor(Math.random() * 1000000) +
+        "_" +
+        file.originalname.split(" ").join("_")
+    );
   },
 });
 const upload = multer({

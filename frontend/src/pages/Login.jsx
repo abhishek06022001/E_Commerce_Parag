@@ -29,13 +29,8 @@ function Login() {
                     token: ac_token.data.message
                 }
             });
-         
-            
             dispatch(logUser(user_info.data));
-            setTimeout(() => {
-                setLoading(false);
-                navigate('/');
-            }, 1000);
+            navigate('/');
         } catch (error) {
             console.log(error.message);
             setInput({ email: '', password: '' });
@@ -45,9 +40,9 @@ function Login() {
     }
     return (
         <div className='text-center flex  flex-col justify-center items-center h-screen bg-slate-800 '>
-            {loading ?
+            {/* {loading ?
                 <div class="spinner-3"></div>
-                :
+                : */}
                 <div
                     className=' bg-slate-300  rounded-md md:w-96 w-80
                 pt-8 pb-8
@@ -80,7 +75,7 @@ function Login() {
                         ><Link to={'/signup'} >Sign up</Link></button>
                     </div>
                 </div>
-            }
+            {/* } */}
         </div>
     )
 }

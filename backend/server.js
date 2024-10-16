@@ -18,10 +18,11 @@ app.listen(PORT, () => {
 app.get("/hello", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
+app.use(express.static("uploads"));
 app.use("/api", require("./routes/users/user.route"));
 app.use("/api", require("./routes/products/product.route"));
 app.use("/api", require("./routes/order/order.route"));
-app.use(express.static("public")); // serve static files
+// app.use(express.static("public")); // serve static files
 
 // sql connection for the project
 const db = require("./models/index");
