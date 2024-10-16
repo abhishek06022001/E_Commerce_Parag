@@ -35,7 +35,7 @@ function Login() {
             setTimeout(() => {
                 setLoading(false);
                 navigate('/');
-            }, 2000);
+            }, 1500);
         } catch (error) {
             console.log(error.message);
             setInput({ email: '', password: '' });
@@ -46,7 +46,7 @@ function Login() {
     return (
         <div className='text-center flex  flex-col justify-center items-center h-screen bg-slate-800 '>
             {loading ?
-                <h1>Loading ...</h1>
+                <div class="spinner-3"></div>
                 :
                 <div
                     className=' bg-slate-300  rounded-md md:w-96 w-80

@@ -1,12 +1,18 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "../pages/Login";
-import App from "../App";
-import TestPage from "../pages/TestPage";
 import Signup from "../pages/Signup";
+import ErrorPage from "../pages/ErrorPage";
+import CommonPage from "../pages/CommonPage";
+import Product from "../pages/user_0/Product";
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <TestPage />
+    element: <CommonPage />,
+    children: [
+      { index: true, element: <Product/> }
+    ]
+
   },
   {
     path: '/login',
@@ -15,5 +21,9 @@ export const router = createBrowserRouter([
   {
     path: '/signup',
     element: <Signup />
+  },
+  {
+    path: '*',
+    element: <ErrorPage />
   }
 ]);

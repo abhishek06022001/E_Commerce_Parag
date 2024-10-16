@@ -13,6 +13,7 @@ const removeTemp = (path) => {
 const productController = {
   create_product: async (req, res) => {
     try {
+     
       if (req.file) {
         req.body.image = req.file.filename;
       }
