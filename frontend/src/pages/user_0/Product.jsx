@@ -1,12 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import axios from "axios";
 function Product() {
     const [products, setProducts] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [filteredProducts, setFilteredProducts] = useState(false);
+    const [loading, setLoading] = useState(true); const inputRef = useRef();
+    const [category, setCategory] = useState(null);
     async function fetchProducts() {
         let ans_arr = await axios.get('/api/get_products');
         fetched_products = ans_arr.data.msg;
+        setProducts(fetched_products);
+        setFilteredProducts(fetched_products);
+    }
+    // Reducer logic here 
+    function handleCategoryChange(e) {
+        if (e.target.value == "none") {
+            inputRef.current.value = '';
+            setCategory(null);
+            setFilteredProducts(products);
+        } else {
+            let new_arr = products.filter((product) => {
+                return (product.category == e.target.value) ? product : false;
+            });
+            inputRef.current.value = '';
+            setCategory(e.target.value);
+            setFilteredProducts(new_arr);
+        }
+
     }
     let fetched_products = '';
     useEffect(() => {
@@ -17,24 +37,28 @@ function Product() {
         }, 1200);
     }, []);
     async function handleChange(e) {
-
-        if (e.target.value == '') {
-            setLoading(true);
-            fetchProducts();
-            setTimeout(() => {
-                setProducts(fetched_products);
-                setLoading(false);
-            }, 800);
-            return;
-
-        }
-        let new_arr = products.filter((product) => {
-            if (product.name.toLowerCase().startsWith(e.target.value.toLowerCase())) {
+        let filter_name = e.target.value.toLowerCase();
+        if (filter_name == '') {
+            let new_arr = products.filter((product) => {
+                if (category) {
+                    return (product.category == (category)) ? product : false;
+                }
                 return product;
-            }
-        });
 
-        setProducts(new_arr);
+            });
+            console.log("new arr is", new_arr);
+
+            // inputRef.current.value = '';
+            setFilteredProducts(new_arr);
+        } else {
+            let filter_array = filteredProducts.filter((product) => {
+                if (((product.name.toLowerCase()).startsWith(filter_name))) {
+                    return product;
+                }
+            });
+            setFilteredProducts(filter_array);
+        }
+
     }
     return (
         <>
@@ -71,9 +95,11 @@ function Product() {
                                 <input type="text" placeholder='search by name'
                                     className='p-1 pl-2 w-96 rounded-sm text-black'
                                     onChange={(e) => handleChange(e)}
+                                    ref={inputRef}
                                 />
                                 <div className='text-black' >
                                     <select name="category" id="category"
+                                        onChange={(e) => handleCategoryChange(e)}
                                         className='rounded-sm text-sm p-1' >
                                         <option value="none">Select a category</option>
                                         <option value="electronics">electronics</option>
@@ -87,7 +113,7 @@ function Product() {
                             </div>
                         </div>
                         <div className='flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4 ' >
-                            {products.map((element) => {
+                            {filteredProducts.map((element) => {
                                 return (
                                     <div className='border border-solid bg-white h-max  p-2 flex rounded-lg'
                                         key={element.id}
