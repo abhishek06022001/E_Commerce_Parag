@@ -23,6 +23,6 @@ router.delete(
   authorization,
   products.delete_product
 );
-router.get("/get_product/:id", auth, authorization, products.get_product);
+router.get("/get_product/:id", auth, products.get_product);
 router.get("/get_products",  products.get_products);
 module.exports = router;

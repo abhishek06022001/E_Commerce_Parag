@@ -74,7 +74,7 @@ const userController = {
   },
   // for testing normally
   test: async (req, res) => {
-    return res.send("This is a test route");
+    return res.status(200).json({ success: true });
   },
   // create user by admin
   create_user: async (req, res) => {
@@ -139,7 +139,8 @@ const userController = {
   // user profile page
   get_user_byId: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.id;
+
       const user = await Users.findByPk(id, { where: { is_deleted: 0 } });
       const user_same = await UserInfo.findOne({ where: { user_id: id } });
       const user_information = {
@@ -148,6 +149,7 @@ const userController = {
         email: user.email,
         address: user_same.address,
         dob: user_same.dob,
+        age: user_same.age,
         image: user_same.image,
       };
       return res.status(200).json(user_information);

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import axios from "axios";
+import { Link } from 'react-router-dom'
 function Product() {
     const [products, setProducts] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState(false);
@@ -26,7 +27,6 @@ function Product() {
             setCategory(e.target.value);
             setFilteredProducts(new_arr);
         }
-
     }
     let fetched_products = '';
     useEffect(() => {
@@ -47,7 +47,6 @@ function Product() {
 
             });
             console.log("new arr is", new_arr);
-
             // inputRef.current.value = '';
             setFilteredProducts(new_arr);
         } else {
@@ -127,7 +126,10 @@ function Product() {
                                             >{element.name}</div>
                                             <div className="flex gap-1 items-center">
                                                 <span className="text-3xl font-bold">${element.price}</span>
-                                                <button className="p-1 font-semibold border border-solid-black" >View Product</button>
+                                                <Link to={`product/${element.id}`} >
+                                                    <button className="p-1 font-semibold border border-solid-black" >View Product</button>
+                                                </Link>
+
                                             </div>
                                             {/* <h1>{element.category}</h1> */}
                                         </div>

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import useLoggedIn from '../customHook/useLoggedIn';
 
 function Signup() {
     const navigate = useNavigate();
@@ -11,6 +12,18 @@ function Signup() {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
     const [loading, setLoading] = useState(false);
+    // custom hook logic likha hai 
+    const [bool] = useLoggedIn();
+    useEffect(() => {
+        if (bool) {
+            navigate('/products');
+        } else {
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        }
+    }, [bool]);
+    //  custom hook ends here :) 
     async function signup(e) {
         e.preventDefault();
         try {

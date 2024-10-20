@@ -3,16 +3,22 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ErrorPage from "../pages/ErrorPage";
 import CommonPage from "../pages/CommonPage";
-import Product from "../pages/user_0/Product";
-
+import Product from "../pages/Product";
+import ProductComponent from "../components/ProductComponent";
+import Profile from "../pages/Profile";
+import { PrivateRoute } from "./PrivateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <CommonPage />,
     children: [
-      { index: true, element: <Product/> }
-    ]
-
+      { index: true, element: <Product /> },
+      { path: 'product/:id', element: <ProductComponent /> },
+      {
+        path: 'profile/:id',
+        element: <PrivateRoute><Profile /></PrivateRoute>
+      },
+    ],
   },
   {
     path: '/login',
@@ -22,6 +28,7 @@ export const router = createBrowserRouter([
     path: '/signup',
     element: <Signup />
   },
+
   {
     path: '*',
     element: <ErrorPage />

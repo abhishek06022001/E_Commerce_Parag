@@ -18,7 +18,13 @@ function CommonPage() {
                             :
                             null
                     }
-                    <div className='bg-slate-300 h-full flex-1'><Outlet /></div>
+                    <div className='bg-slate-300 h-full flex-1'>
+                        
+                        
+                        <Outlet />
+                        
+                        
+                    </div>
             </div >
         </>
     )

@@ -1,17 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { jwtDecode } from "jwt-decode";
 import { logUser } from '../features/user/userSlice';
+import useLoggedIn from '../customHook/useLoggedIn';
+import { store } from '../store/store';
 function Login() {
+    const navigate = useNavigate('');
+    const [bool] = useLoggedIn();
+  
+
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        if (bool) {
+            navigate('/');
+        } else {
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        }
+    }, [bool]);
     const [input, setInput] = useState({
         email: '', password: ''
     });
-    const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+
     function handleChange(e) {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
@@ -29,7 +43,8 @@ function Login() {
                     token: ac_token.data.message
                 }
             });
-            dispatch(logUser(user_info.data));
+            user_info.data = { ...user_info.data, id: id };
+            store.dispatch(logUser(user_info.data))
             navigate('/');
         } catch (error) {
             console.log(error.message);
@@ -40,9 +55,9 @@ function Login() {
     }
     return (
         <div className='text-center flex  flex-col justify-center items-center h-screen bg-slate-800 '>
-            {/* {loading ?
+            {loading ?
                 <div class="spinner-3"></div>
-                : */}
+                :
                 <div
                     className=' bg-slate-300  rounded-md md:w-96 w-80
                 pt-8 pb-8
@@ -75,7 +90,7 @@ function Login() {
                         ><Link to={'/signup'} >Sign up</Link></button>
                     </div>
                 </div>
-            {/* } */}
+            }
         </div>
     )
 }

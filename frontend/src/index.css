@@ -3,8 +3,11 @@
 @tailwind utilities;
 * {
   margin: 0;
-  padding: 0px ;
+  padding: 0px;
   box-sizing: border-box;
+}
+.max_width_half {
+  width: 50%;
 }
 /* found the spinner loader on internet */
 .spinner-3 {
