@@ -108,16 +108,23 @@ const userController = {
       const user_obj = await UserInfo.findOne({
         where: { user_id: id },
       });
+      // return res.status(200).json({ msg: req.file });
+
       const user = await Users.findByPk(id);
       if (req.file) {
-        fs.unlink(process.cwd() + "/uploads/" + user_obj.image, (err) => {
-          if (err) throw err;
-        });
+        if (user_obj.image) {
+          //
+
+          fs.unlink(process.cwd() + "/uploads/" + user_obj.image, (err) => {
+            if (err) throw err;
+          });
+        }
         req.body.image = req.file.filename;
       }
       await Users.update({ ...req.body }, { where: { id: id } });
       await UserInfo.update({ ...req.body }, { where: { user_id: id } });
-      return res.status(200).json({ msg: "updated success" });
+      return res.status(200).json({ ...req.body });
+      
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

@@ -6,7 +6,7 @@ import { store } from '../store/store';
 function Sidebar() {
     const { role, id } = useSelector(state => state.users_store_reducer);
     const user_info = useSelector(state => state.users_store_reducer);
-    console.log(user_info);
+    // console.log(user_info);
 
     const is_logged_in = localStorage.getItem('accessToken');
     const navigate = useNavigate('');

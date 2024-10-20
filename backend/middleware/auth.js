@@ -7,9 +7,7 @@ const auth = async (req, res, next) => {
     const token = req.headers.token;
     if (token) {
       const { id } = jwt.verify(token, "JWT_SECRET_KEY");
-      
       req.id = id;
-      
       next();
     } else {
       return res.status(400).json({ login: false, msg: "No token" });
