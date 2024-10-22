@@ -10,6 +10,8 @@ function Product() {
     const [category, setCategory] = useState(null);
     const { role } = useSelector(state => state.users_store_reducer);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [delete_id, setDelete_id] = useState(null);
+    const [delete_modal, set_is_delete_modal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [product, setProduct] = useState({
         file: ''
@@ -78,24 +80,24 @@ function Product() {
         if (e.target.name == 'create_product') {
             setIsEdit(false);
             setProduct({
-                name:'',description:'',image:'',file:'',price:'',category:"none"
+                name: '', description: '', image: '', file: '', price: '', category: "none"
             });
         } else {
             const curr_product = filteredProducts.filter(prod => {
                 if (prod.id == e.target.id) {
-                    return prod;
+                    return (prod.id == e.target.id) ? prod : false;
                 }
             });
             setProduct(curr_product[0]);
-          
-            
+
+
             setIsEdit(true);
         }
         setIsModalOpen(true);
     }
     let ac_token = localStorage.getItem('accessToken');
     async function submit_edited_product(e) {
-        
+
         e.preventDefault();
         setProduct({
             name: '', description: '', image: '', file: '', price: '', category: "none"
@@ -125,11 +127,12 @@ function Product() {
                 }
                 return prod;
             })
+            
+            
             setFilteredProducts(updated_product_array);
             setProducts(updated_product_array_main);
             setIsModalOpen(false);
-            alert("product Updated successFully");
-            
+
         } catch (error) {
             alert("some error while Editing product , please try again ...")
         }
@@ -155,7 +158,7 @@ function Product() {
             setProducts([...products, response.data.product]);
             setFilteredProducts([...filteredProducts, response.data.product]);
             setIsModalOpen(false);
-            alert("product Created successFully");
+           
             setProduct({ file: '' });
         } catch (error) {
             alert("some error while creating product , please try again ...")
@@ -166,7 +169,48 @@ function Product() {
         setProduct({
             name: '', description: '', image: '', file: '', price: '', category: "none"
         });
-        
+
+    }
+    async function delete_product(e) {
+        try {
+            const del = await axios.delete(`/api/delete_product/${delete_id}`, {
+                headers: {
+                    token: ac_token
+                }
+            });
+            const new_arr = filteredProducts.filter(prod => {
+                if (prod.id == delete_id) {
+                    return false;
+                }
+                else {
+                    return prod;
+                }
+
+            });
+           
+            
+            const new_arr1 = products.filter(prod => {
+                if (prod.id == delete_id) {  
+                    return false;
+                } 
+                else {
+                    return prod;
+                }
+
+            });
+            console.log(new_arr);
+            console.log(new_arr1);
+            setProducts(new_arr1);
+            setFilteredProducts(new_arr);
+            set_is_delete_modal(false);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    function open_delete_modal(e) {
+        setDelete_id(e.target.id);
+        set_is_delete_modal(true);
     }
     return (
         <>
@@ -205,6 +249,7 @@ function Product() {
                     <>
                         <div className='min-h-screen flex flex-col relative ' >
                             <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-100000 p-10 ${isModalOpen ? "" : "hidden"}`}>
+
                                 <div>
                                     {isEdit ?
                                         <>
@@ -325,15 +370,23 @@ function Product() {
 
                                             </div>
                                         </>
-
                                     }
-
                                 </div>
 
                             </div>
-                            {/* modal below */}
+                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-100000 p-10 ${delete_modal ? "" : "hidden"}`}>
+                                Do you really want to delete the product ?
+                                <div className="flex gap-5" >
+                                    <button className="p-1 font-semibold border border-solid-black bg-blue-900"
+                                        onClick={e => delete_product(e)}
+                                    >Yes</button>
+                                    <button className="p-1 font-semibold border border-solid-black bg-blue-900"
+                                        onClick={e => set_is_delete_modal(false)}
+                                    >Nope</button>
+                                </div>
+                            </div>
 
-
+                            {/* navbar  */}
                             <div className='bg-slate-900 h-14 text-white flex items-center justify-evenly  '>
                                 <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                                 <div className='flex items-center gap-5'>
@@ -363,8 +416,8 @@ function Product() {
                                     </>}
                                 </div>
                             </div>
+                            {/* filtered products ka lists  */}
                             <div className='flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4 ' >
-
                                 {filteredProducts.map((element) => {
                                     return (
                                         <div className='border border-solid bg-white h-max  p-2 flex rounded-lg'
@@ -391,7 +444,9 @@ function Product() {
                                                                 name="edit_product" onClick={(e) => openModal(e)} id={element.id}
                                                             >Edit Product</button>
 
-                                                            <button className="p-1 font-semibold border border-solid-black" >Delete Product</button>
+                                                            <button className="p-1 font-semibold border border-solid-black"
+                                                                onClick={(e) => open_delete_modal(e)} id={element.id}
+                                                            >Delete Product</button>
 
                                                         </>
                                                         : <>
