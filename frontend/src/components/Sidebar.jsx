@@ -24,11 +24,7 @@ function Sidebar() {
                     <h1 className='text-lg  lg:p-3 p-1 border border-solid-white'>Products Listing</h1>
                 </Link>
             </div>
-
             {is_logged_in ?
-
-
-
                 <>
                     <div>
                         <Link to={`/profile/${id}`}>
@@ -48,8 +44,6 @@ function Sidebar() {
                         :
 
                         <>
-
-
                             <div>
                                 <Link to={'/order_history'}>
                                     <h1 className='text-lg  lg:p-3 p-1 border border-solid-white'>Order History</h1>
@@ -66,8 +60,6 @@ function Sidebar() {
 
                 </>
                 :
-
-
                 <>
                     <div>
                         <Link to={'/login'}>
@@ -80,9 +72,6 @@ function Sidebar() {
                         </Link>
                     </div>
                 </>}
-
-
-
         </div>
     )
 }

@@ -109,12 +109,10 @@ const userController = {
         where: { user_id: id },
       });
       // return res.status(200).json({ msg: req.file });
-
       const user = await Users.findByPk(id);
       if (req.file) {
         if (user_obj.image) {
           //
-
           fs.unlink(process.cwd() + "/uploads/" + user_obj.image, (err) => {
             if (err) throw err;
           });

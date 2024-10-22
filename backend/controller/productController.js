@@ -13,12 +13,13 @@ const removeTemp = (path) => {
 const productController = {
   create_product: async (req, res) => {
     try {
-     
       if (req.file) {
         req.body.image = req.file.filename;
       }
-      await Products.create(req.body);
-      return res.status(200).json({ msg: "product created successfully" });
+      const new_product = await Products.create(req.body);
+      return res
+        .status(200)
+        .json({ product: new_product, msg: "product created successfully" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
