@@ -49,8 +49,15 @@ const productController = {
         }
         req.body.image = req.file.filename;
       }
-      await Products.update(req.body, { where: { id: product_id } });
-      return res.status(200).json({ msg: "Updated successfully" });
+      await Products.update(req.body, {
+        where: { id: product_id },
+      });
+      const updated_product = await Products.findOne({
+        where: { id: product_id },
+      });
+      return res
+        .status(200)
+        .json({ product: updated_product, msg: "Updated successfully" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

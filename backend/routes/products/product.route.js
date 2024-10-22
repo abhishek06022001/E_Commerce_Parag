@@ -24,5 +24,5 @@ router.delete(
   products.delete_product
 );
 router.get("/get_product/:id", auth, products.get_product);
-router.get("/get_products",  products.get_products);
+router.get("/get_products", products.get_products);
 module.exports = router;

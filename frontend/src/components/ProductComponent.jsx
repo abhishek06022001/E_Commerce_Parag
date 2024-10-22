@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BiArrowBack } from "react-icons/bi";
+import { useSelector } from 'react-redux';
 function ProductComponent() {
 
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
+  const { role } = useSelector(state => state.users_store_reducer);
   const ac_token = localStorage.getItem('accessToken');
   useEffect(() => {
     async function getProduct() {
@@ -66,12 +68,17 @@ function ProductComponent() {
                 {product.category}
               </h1>
               <div >
-                <button
-                  className='bg-slate-600 p-3 mt-3 mb-3 text-white'
-                  onClick={() => alert("button clicked")}
-                >Add to Cart
 
-                </button>
+                {(role == 0) &&
+                  <button
+                    className='bg-slate-600 p-3 mt-3 mb-3 text-white'
+                    onClick={() => alert("button clicked")}
+                  >Add to Cart
+
+                  </button>
+                }
+
+
               </div>
 
             </div>
@@ -80,7 +87,7 @@ function ProductComponent() {
 
       </div>
 
-    </div>
+    </div >
   )
 }
 
