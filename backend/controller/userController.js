@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const { where } = require("sequelize");
+const { count } = require("console");
 const userController = {
   // user basic login logout register
   register: async (req, res) => {
@@ -41,6 +42,7 @@ const userController = {
       const user = await Users.findOne({
         where: {
           email: email,
+          is_deleted: 0,
         },
       });
       if (user == null) {
@@ -122,7 +124,6 @@ const userController = {
       await Users.update({ ...req.body }, { where: { id: id } });
       await UserInfo.update({ ...req.body }, { where: { user_id: id } });
       return res.status(200).json({ ...req.body });
-      
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
@@ -130,13 +131,21 @@ const userController = {
   // get all user data by user
   get_users: async (req, res) => {
     try {
-      Users.findAll({
+      const limit = 6;
+      const skip = (parseInt(req.query.skip)-1)*6 || 0;
+      const count = await Users.count({
         where: {
           is_deleted: 0,
         },
-      }).then((data) => {
-        return res.status(200).json(data);
       });
+      const users = await Users.findAll({
+        limit: limit,
+        offset: skip,
+        where: {
+          is_deleted: 0,
+        },
+      });
+      return res.status(200).json({ count: count, data: users });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

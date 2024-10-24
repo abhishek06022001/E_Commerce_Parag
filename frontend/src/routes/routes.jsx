@@ -7,6 +7,7 @@ import Product from "../pages/Product";
 import ProductComponent from "../components/ProductComponent";
 import Profile from "../pages/Profile";
 import { PrivateRoute } from "./PrivateRoute";
+import Users from "../pages/user_1/Users";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
       {
         path: 'profile/:id',
         element: <PrivateRoute><Profile /></PrivateRoute>
+      },
+      {
+        path: 'users',
+        element: <PrivateRoute><Users /></PrivateRoute>
       },
     ],
   },
