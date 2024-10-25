@@ -185,10 +185,7 @@ function Product() {
                 else {
                     return prod;
                 }
-
             });
-           
-            
             const new_arr1 = products.filter(prod => {
                 if (prod.id == delete_id) {  
                     return false;
@@ -420,7 +417,7 @@ function Product() {
                             <div className='flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4 ' >
                                 {filteredProducts.map((element) => {
                                     return (
-                                        <div className='border border-solid bg-white h-max  p-2 flex rounded-lg'
+                                        <div className='border border-solid bg-white h-max individual_prod p-2 flex rounded-lg'
                                             key={element.id}
                                         >
                                             <div>

@@ -29,3 +29,10 @@
   }
 }
 /*  */
+.individual_prod:hover {
+  transform: scale(1.05);
+  box-shadow: 3px 3px 10px 10px rgba(37, 176, 155, 0.5);
+}
+.individual_prod {
+  transition: 0.3s ease;
+}
