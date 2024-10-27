@@ -132,20 +132,17 @@ const userController = {
   get_users: async (req, res) => {
     try {
       const limit = 6;
-      const skip = (parseInt(req.query.skip)-1)*6 || 0;
+      const skip = (parseInt(req.query.skip) - 1) * 6 ||0 ;
       const count = await Users.count({
         where: {
           is_deleted: 0,
         },
       });
-      const users = await Users.findAll({
-        limit: limit,
-        offset: skip,
-        where: {
-          is_deleted: 0,
-        },
-      });
-      return res.status(200).json({ count: count, data: users });
+
+      const users = await db.sequelize.query(
+        `SELECT * FROM users inner join user_infos on users.id= user_infos.user_id where is_deleted = 0 LIMIT ${limit} offset ${skip} `
+      );
+      return res.status(200).json({ count: count, data: users[0] });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
@@ -153,20 +150,15 @@ const userController = {
   // user profile page
   get_user_byId: async (req, res) => {
     try {
-      const id = req.id;
+      const id = req.params.id;
+      const user_information = await db.sequelize.query(
+        "SELECT * FROM users inner join user_infos on users.id= user_infos.user_id where users.id = ? ",
+        {
+          replacements: [id],
+        }
+      );
 
-      const user = await Users.findByPk(id, { where: { is_deleted: 0 } });
-      const user_same = await UserInfo.findOne({ where: { user_id: id } });
-      const user_information = {
-        role: user.role,
-        name: user.name,
-        email: user.email,
-        address: user_same.address,
-        dob: user_same.dob,
-        age: user_same.age,
-        image: user_same.image,
-      };
-      return res.status(200).json(user_information);
+      return res.status(200).json(user_information[0]);
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }

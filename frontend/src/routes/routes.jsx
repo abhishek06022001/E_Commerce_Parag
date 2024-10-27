@@ -8,6 +8,9 @@ import ProductComponent from "../components/ProductComponent";
 import Profile from "../pages/Profile";
 import { PrivateRoute } from "./PrivateRoute";
 import Users from "../pages/user_1/Users";
+import Cart from "../pages/Cart";
+import Orders from "../pages/Orders";
+import { ProtectedRoute } from "./ProtectedRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -21,7 +24,16 @@ export const router = createBrowserRouter([
       },
       {
         path: 'users',
-        element: <PrivateRoute><Users /></PrivateRoute>
+        element: <ProtectedRoute><Users /></ProtectedRoute>
+        // element: <PrivateRoute><Users /></PrivateRoute>
+      },
+      {
+        path: '/cart',
+        element: <Cart />
+      },
+      {
+        path: '/order_history/:id',
+        element: <Orders />
       },
     ],
   },
@@ -33,7 +45,6 @@ export const router = createBrowserRouter([
     path: '/signup',
     element: <Signup />
   },
-
   {
     path: '*',
     element: <ErrorPage />

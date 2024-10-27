@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Sidebar from '../components/Sidebar'
 import { Outlet } from 'react-router-dom'
 import axios from 'axios';
+import { DarkModeContext } from "../Context/DarkModeContext.jsx";
+// import { darkMode } from '../Context/DarkModeContext'
 function CommonPage() {
+    const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const menu = true;
     // menu part will be only checked here dude from redux .
     useEffect(() => {
@@ -12,7 +15,7 @@ function CommonPage() {
             <div className='flex  min-h-screen   '>
                 {
                     menu ?
-                        <div className='bg-slate-800 min-h-full sm:w-1/5 w-2/5 p-1 sm:p-0'>
+                        <div className={`${darkMode ? `bg-slate-800 text-white` : `bg-slate-200 text-black`}  sidebar min-h-full w-1/6 p-1 sm:p-0`}>
                             < Sidebar />
                         </div>
                         :

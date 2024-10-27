@@ -51,7 +51,6 @@ function Product() {
         fetchProducts();
         setTimeout(() => {
             setProducts(fetched_products);
-
             setLoading(false);
         }, 1200);
     }, []);
@@ -64,7 +63,7 @@ function Product() {
                 }
                 return product;
             });
-            console.log("new arr is", new_arr);
+
             // inputRef.current.value = '';
             setFilteredProducts(new_arr);
         } else {
@@ -89,8 +88,6 @@ function Product() {
                 }
             });
             setProduct(curr_product[0]);
-
-
             setIsEdit(true);
         }
         setIsModalOpen(true);
@@ -127,12 +124,9 @@ function Product() {
                 }
                 return prod;
             })
-            
-            
             setFilteredProducts(updated_product_array);
             setProducts(updated_product_array_main);
             setIsModalOpen(false);
-
         } catch (error) {
             alert("some error while Editing product , please try again ...")
         }
@@ -158,7 +152,7 @@ function Product() {
             setProducts([...products, response.data.product]);
             setFilteredProducts([...filteredProducts, response.data.product]);
             setIsModalOpen(false);
-           
+
             setProduct({ file: '' });
         } catch (error) {
             alert("some error while creating product , please try again ...")
@@ -187,16 +181,15 @@ function Product() {
                 }
             });
             const new_arr1 = products.filter(prod => {
-                if (prod.id == delete_id) {  
+                if (prod.id == delete_id) {
                     return false;
-                } 
+                }
                 else {
                     return prod;
                 }
 
             });
-            console.log(new_arr);
-            console.log(new_arr1);
+
             setProducts(new_arr1);
             setFilteredProducts(new_arr);
             set_is_delete_modal(false);
@@ -234,7 +227,7 @@ function Product() {
                                     <div className='relative' >
                                         <FaShoppingCart className='w-8' />
                                     </div>
-                                    <div>{role}</div>
+
                                 </>}
 
                             </div>
@@ -245,7 +238,7 @@ function Product() {
                     </div> :
                     <>
                         <div className='min-h-screen flex flex-col relative ' >
-                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-100000 p-10 ${isModalOpen ? "" : "hidden"}`}>
+                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${isModalOpen ? "" : "hidden"}`}>
 
                                 <div>
                                     {isEdit ?
@@ -371,7 +364,9 @@ function Product() {
                                 </div>
 
                             </div>
-                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-100000 p-10 ${delete_modal ? "" : "hidden"}`}>
+                            
+                            <div className={`h-screen fixed w-screen top-0 left-0 bg-gray-900 bg-opacity-70 z-10  ${(delete_modal || isModalOpen  )? "" : "hidden"}`}> </div>
+                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${delete_modal ? "" : "hidden"}`}>
                                 Do you really want to delete the product ?
                                 <div className="flex gap-5" >
                                     <button className="p-1 font-semibold border border-solid-black bg-blue-900"
@@ -407,41 +402,48 @@ function Product() {
 
                                     </> : <>
                                         <div className='relative' >
-                                            <FaShoppingCart className='w-8' />
+                                            <Link to={`cart`} >
+                                                <FaShoppingCart className='w-8' />
+                                            </Link>
+
                                         </div>
-                                        <div>{role}</div>
+
                                     </>}
                                 </div>
                             </div>
                             {/* filtered products ka lists  */}
-                            <div className='flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-3 gap-4 p-4 ' >
+                            <div className='flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-4 gap-4 p-4 ' >
                                 {filteredProducts.map((element) => {
                                     return (
-                                        <div className='border border-solid bg-white h-max individual_prod p-2 flex rounded-lg'
+                                        <div className='border border-solid bg-white h-max individual_prod  flex 
+                                        justify-center 
+                                        rounded-lg'
                                             key={element.id}
                                         >
-                                            <div>
+                                            <div className="  flex flex-col justify-center items-center p-3">
                                                 <img
-                                                    className="h-52 mx-auto"
+                                                    className="lg:h-44"
                                                     src={"http://localhost:8080/" + element.image} alt="" />
                                                 <div
                                                     className="font-medium text-slate-800 "
                                                 >{element.name}</div>
-                                                <div className="flex gap-1 items-center">
-                                                    <span className="text-3xl font-bold">${element.price}</span>
+                                                <div className="text-3xl font-bold">${element.price}</div>
+                                                <div className="flex  gap-1 items-center">
+
 
                                                     {(role == 1)
                                                         ?
                                                         <>
                                                             <Link to={`product/${element.id}`} >
-                                                                <button className="p-1 font-semibold border border-solid-black" >View Product</button>
-                                                            </Link>
 
-                                                            <button className="p-1 font-semibold border border-solid-black"
+                                                                <button className="text-white p-1 text-sm bg-slate-700 font-semibold border
+                                                                border-solid-black ">View Product</button>
+                                                            </Link>
+                                                            <button className="text-sm text-white p-1 bg-slate-700 font-semibold border border-solid-black"
                                                                 name="edit_product" onClick={(e) => openModal(e)} id={element.id}
                                                             >Edit Product</button>
 
-                                                            <button className="p-1 font-semibold border border-solid-black"
+                                                            <button className=" text-sm text-white p-1 bg-slate-700 font-semibold border border-solid-black"
                                                                 onClick={(e) => open_delete_modal(e)} id={element.id}
                                                             >Delete Product</button>
 
@@ -449,13 +451,14 @@ function Product() {
                                                         : <>
                                                             <Link to={`product/${element.id}`} >
                                                                 <button className="p-1 font-semibold border border-solid-black" >View Product</button>
+
                                                             </Link>
                                                         </>
                                                     }
 
                                                 </div>
-                                                {/* <h1>{element.category}</h1> */}
                                             </div>
+
                                         </div>
                                     );
                                 })}

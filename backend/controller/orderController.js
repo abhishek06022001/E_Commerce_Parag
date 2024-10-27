@@ -1,5 +1,6 @@
 const db = require("../models/index");
 const Order = db.orders;
+const Products = db.products;
 const Product = db.products;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcrypt");
@@ -14,16 +15,24 @@ const removeTemp = (path) => {
 const orderController = {
   submitOrder: async (req, res) => {
     try {
-      const order_id = Math.floor(Math.random() * 1000); //A random order_id which is common for all the products
-      const promises = req.body.products.map((element) => {
+      const user_ka_id = parseInt(req.params.id);
+      const random_order_id = Math.floor(Math.random() * 1000); //A random order_id which is common for all the products
+      // return res.status(200).json({...req.body});
+
+      let order_array = req.body;
+
+      // return res.status(200).json({...req.body});
+      const promises = order_array.map((element) => {
         let order = {
-          ...element,
-          user_id: req.params.id,
-          order_id: order_id,
+          product_id: element.id,
+          user_id: user_ka_id,
+          quantity: element.quantity,
+          order_id: random_order_id,
         };
-        Order.create(order);
+        return order;
       });
-      await Promise.all(promises);
+      // return res.status(200).json(promises);
+      await Order.bulkCreate(promises);
       return res.status(200).json({ success: true, msg: "order submitted" });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
@@ -31,6 +40,7 @@ const orderController = {
   },
   getOrders: async (req, res) => {
     try {
+      // return res.status(200).json("get ordered called");
       const user_id = req.params.id;
       const orders = await Order.findAll({
         where: {
@@ -38,28 +48,21 @@ const orderController = {
         },
       });
       //   must do await because it is still a promise dude
-      let orders_bycategory = await orders.reduce(
-        async (accpromise, product) => {
-          const acc = await accpromise;
-          if (!acc[product.order_id]) {
-            acc[product.order_id] = [];
-          }
-          const prod = await Product.findOne({
-            where: { id: product.product_id },
-          });
-          acc[product.order_id].push({
-            ...prod.dataValues,
-            quantity: product.quantity,
-          });
-          return acc;
-        },
-        {}
-      );
+      let order_history = [];
+      let promises = [];
 
-      return res.status(200).json({ success: true, msg: orders_bycategory });
+      // return the quantity from order and product from the id and product table and group them by order and then send
+      const result = await db.sequelize.query(
+        `select * from products inner join orders  on products.id = orders.product_id where user_id=${user_id} 
+        order by orders.order_id `
+      );
+    
+      return res.status(200).json({ success: true, msg: result[0] });
+      //
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
   },
 };
+
 module.exports = orderController;

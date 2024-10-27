@@ -18,27 +18,19 @@ function Users() {
                 token: ac_token
             }
         });
-        console.log(new_users);
-
         setLoading(false);
         setUsers(new_users.data.data);
         setCount(new_users.data.count);
     }
     function editUser(e) {
         const id = e.currentTarget.id;
-        // console.log(users);
-
 
         const filtered_user = users.filter(user => {
             if (user.id == id) {
                 return true;
             }
-
         });
-        // console.log("the filtered user is", filtered_user);
         setUser(filtered_user[0]);
-        console.log(filtered_user[0]);
-
         setIsEditing(prev => !prev);
     }
     function deleteUser(e) {

@@ -3,14 +3,30 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BiArrowBack } from "react-icons/bi";
 import { useSelector } from 'react-redux';
+import { addToCart, removeFromCart, placeOrder } from "../features/cart/cartSlice";
+import { store } from '../store/store';
 function ProductComponent() {
-
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState();
+  const [quantity, setQuantity] = useState(0);
   const { id } = useParams();
+
+
   const navigate = useNavigate();
   const { role } = useSelector(state => state.users_store_reducer);
+  const { cart } = useSelector(state => state.cart_reducer);
+
   const ac_token = localStorage.getItem('accessToken');
+  function add(product) {
+    setQuantity(prev => prev + 1);
+    store.dispatch(addToCart(product));
+  }
+  function remove(product) {
+    setQuantity(prev => prev - 1);
+
+    store.dispatch(removeFromCart(product));
+  }
+
   useEffect(() => {
     async function getProduct() {
       try {
@@ -19,10 +35,16 @@ function ProductComponent() {
             token: ac_token
           }
         });
+        let cart_id = fetched_product.data.msg.id;
+        const prod = cart.find(element => element.id == cart_id);
+        if (prod) {
+          setQuantity(prod.quantity);
+        }
         setProduct(fetched_product.data.msg);
         setLoading(false);
+
       } catch (error) {
-        alert("Sorry , some issues ....")
+     
         navigate('/');
       }
     }
@@ -67,15 +89,34 @@ function ProductComponent() {
               <h1>
                 {product.category}
               </h1>
-              <div >
+              <div className='flex' >
 
                 {(role == 0) &&
                   <button
                     className='bg-slate-600 p-3 mt-3 mb-3 text-white'
-                    onClick={() => alert("button clicked")}
+                    onClick={() => add(product)}
+
                   >Add to Cart
 
                   </button>
+                }
+                {
+                  (quantity > 0) &&
+
+                  <>
+                    <button
+                      className='font-mono text-sky-950 ml-3 mr-3 '
+                    >{quantity}</button>
+
+                    < button
+                      className='bg-slate-600 p-3 mt-3 mb-3 sm:ml-0 ml-3 text-white'
+                      onClick={() => remove(product)}
+
+                    >Remove from Cart
+
+                    </button>
+                  </>
+
                 }
 
 

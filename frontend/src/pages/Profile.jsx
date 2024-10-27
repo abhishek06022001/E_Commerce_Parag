@@ -51,9 +51,9 @@ function Profile() {
                     token: ac_token
                 }
             });
-            console.log(user.data);
+         
 
-            setUser(user.data);
+            setUser(user.data[0]);
         }
         getUserInfo();
     }, [id]);

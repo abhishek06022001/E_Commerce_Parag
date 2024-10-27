@@ -10,7 +10,7 @@ import { store } from '../store/store';
 function Login() {
     const navigate = useNavigate('');
     const [bool] = useLoggedIn();
-  
+
 
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -43,7 +43,8 @@ function Login() {
                     token: ac_token.data.message
                 }
             });
-            user_info.data = { ...user_info.data, id: id };
+            user_info.data = { ...user_info.data[0], id: id };
+          
             store.dispatch(logUser(user_info.data))
             navigate('/');
         } catch (error) {
