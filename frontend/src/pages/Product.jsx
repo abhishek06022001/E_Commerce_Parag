@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import axios from "axios";
 import { Link } from 'react-router-dom'
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
+import { DarkModeContext } from '../Context/DarkModeContext'
 function Product() {
     const [products, setProducts] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState(false);
@@ -13,6 +14,7 @@ function Product() {
     const [delete_id, setDelete_id] = useState(null);
     const [delete_modal, set_is_delete_modal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const [product, setProduct] = useState({
         file: ''
     });
@@ -238,6 +240,7 @@ function Product() {
                     </div> :
                     <>
                         <div className='min-h-screen flex flex-col relative ' >
+                            {/* modal hai  */}
                             <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${isModalOpen ? "" : "hidden"}`}>
 
                                 <div>
@@ -364,8 +367,8 @@ function Product() {
                                 </div>
 
                             </div>
-                            
-                            <div className={`h-screen fixed w-screen top-0 left-0 bg-gray-900 bg-opacity-70 z-10  ${(delete_modal || isModalOpen  )? "" : "hidden"}`}> </div>
+
+                            <div className={`h-screen fixed w-screen top-0 left-0 bg-gray-900 bg-opacity-70 z-10  ${(delete_modal || isModalOpen) ? "" : "hidden"}`}> </div>
                             <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${delete_modal ? "" : "hidden"}`}>
                                 Do you really want to delete the product ?
                                 <div className="flex gap-5" >
@@ -379,11 +382,11 @@ function Product() {
                             </div>
 
                             {/* navbar  */}
-                            <div className='bg-slate-900 h-14 text-white flex items-center justify-evenly  '>
+                            <div className={` ${darkMode ? `bg-slate-900 text-white` : `bg-white text-black ` } navbar h-14  flex items-center justify-evenly`}>
                                 <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                                 <div className='flex items-center gap-5'>
                                     <input type="text" placeholder='search by name'
-                                        className='p-1 pl-2 w-96 rounded-sm text-black'
+                                        className='p-1 pl-2 w-96 rounded-sm '
                                         onChange={(e) => handleChange(e)}
                                         ref={inputRef}
                                     />
@@ -412,12 +415,12 @@ function Product() {
                                 </div>
                             </div>
                             {/* filtered products ka lists  */}
-                            <div className='flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-4 gap-4 p-4 ' >
+                            <div className={`${darkMode ? `bg-slate-800`:`bg-slate-400` } navbar flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-4 gap-4 p-4 cards `} >
                                 {filteredProducts.map((element) => {
                                     return (
-                                        <div className='border border-solid bg-white h-max individual_prod  flex 
+                                        <div className={`${darkMode ? `bg-slate-800 text-white individual_prod-dark-mode` :`bg-white text-black   individual_prod-light-mode` } navbar  border border-solid  h-max   flex 
                                         justify-center 
-                                        rounded-lg'
+                                        rounded-lg`}
                                             key={element.id}
                                         >
                                             <div className="  flex flex-col justify-center items-center p-3">

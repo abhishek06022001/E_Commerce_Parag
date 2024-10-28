@@ -60,7 +60,7 @@ function Login() {
                 <div class="spinner-3"></div>
                 :
                 <div
-                    className=' bg-slate-300  rounded-md md:w-96 w-80
+                    className=' bg-slate-300  login md:w-96 w-80
                 pt-8 pb-8
                 '
                 >

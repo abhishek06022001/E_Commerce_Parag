@@ -15,14 +15,14 @@ function CommonPage() {
             <div className='flex  min-h-screen   '>
                 {
                     menu ?
-                        <div className={`${darkMode ? `bg-slate-800 text-white` : `bg-slate-200 text-black`}  sidebar min-h-full w-1/6 p-1 sm:p-0`}>
+                        <div className={`${darkMode ? `bg-slate-800 text-white` : `bg-slate-200 text-slate-800 `} font-semibold  sidebar min-h-full w-1/6 p-1 sm:p-0`}>
                             < Sidebar />
                         </div>
                         :
                         null
                 }
                 {/* background color that needs to be changed in theme change */}
-                <div className='bg-slate-500 h-full flex-1'>
+                <div className={` ${darkMode ? `bg-slate-700` :`bg-slate-300` }  h-full flex-1`}>
 
 
                     <Outlet />
