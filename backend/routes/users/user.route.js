@@ -5,7 +5,7 @@ const upload = require("../../middleware/multer");
 var router = require("express").Router();
 router.post("/register", users.register);
 router.post("/login", users.login);
-router.post("/test", auth, authorization, users.test);
+// router.post("/test", auth, authorization, users.test);
 // router.post("/test", users.test);
 router.post(
   "/create_user",

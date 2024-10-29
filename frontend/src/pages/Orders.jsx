@@ -14,26 +14,38 @@ function Orders() {
     }
     useEffect(() => {
         async function getOrders() {
-            const orders = await axios.get(`/api/get_orders/${id}`, {
-                headers: {
-                    token: ac_token
-                }
-            })
-            let res = orders.data.msg;
-         
-            let order_history = {};
-            res.forEach(element => {
-                if (order_history[element['order_id']]) {
-                    order_history[element['order_id']].push(element);
-                } else {
-                    order_history[element['order_id']] = [];
-                    order_history[element['order_id']].push(element);
-                }
-            });
-            setTimeout(() => {
-                setLoading(false);
-                setOrders(order_history);
-            }, 2000);
+            try {
+                const orders = await axios.get(`/api/get_orders/${id}`, {
+                    headers: {
+                        token: ac_token
+                    }
+                })
+                let res = orders.data.msg;
+
+                let order_history = {};
+                res.forEach(element => {
+                    if (order_history[element['order_id']]) {
+                        order_history[element['order_id']].push(element);
+                    } else {
+                        order_history[element['order_id']] = [];
+                        order_history[element['order_id']].push(element);
+                    }
+                });
+                setTimeout(() => {
+                    setLoading(false);
+                    setOrders(order_history);
+                    console.log("The order history is ", order_history);
+
+                }, 2000);
+
+            } catch (error) {
+                setTimeout(() => {
+                    setLoading(false);
+                    navigate('/');
+                    console.log("The order history is ", order_history);
+
+                }, 2000);
+            }
         }
         getOrders();
     }, [id]);
@@ -42,19 +54,24 @@ function Orders() {
         for (let key in obj) {
             let total = 0;
             let date = null;
-            ans.push(<div className='bg-slate-500 h-auto m-1 p-3 text-white' >
-                <div> Order details :</div>
+            ans.push(<div className='bg-slate-700 rounded-lg h-auto mt-4 p-3 text-white' >
+
                 <div>Order Date : {obj[key][0]['createdAt'].substring(0, 10)}</div>
+                <div className='grid grid-cols-3 gap-1'>
+                    <div className='bg-slate-600 p-3 rounded-sm'>Name</div>
+                    <div className='bg-slate-600 p-3 rounded-sm'>Price</div>
+                    <div className='bg-slate-600 p-3 rounded-sm'>Quantity</div>
+
+                </div>
                 {obj[key].map((element) => {
 
                     total = element.quantity * element.price;
-                    return <div className='flex justify-between'>
+                    return <div className='grid grid-cols-3 gap-1 mt-1'>
 
-                        <div>{element.name}</div>
-                        <div className='flex gap-2' >
-                            <div>{element.price}</div>
-                            <div>{element.quantity}</div>
-                        </div>
+                        <div className='bg-slate-600 p-1 pl-3 rounded-sm' >{element.name}</div>
+                        <div className='bg-slate-600 p-1 pl-3 rounded-sm' >${element.price}</div>
+                        <div className='bg-slate-600 p-1 pl-3 rounded-sm' >{element.quantity}</div>
+
 
                     </div>
                 })}
@@ -66,16 +83,19 @@ function Orders() {
     return (
         <>
 
-            <div className='min-h-screen flex flex-col justify-center items-center relative ' >
+            <div className='min-h-screen flex flex-col justify-center items-center relative  p-3' >
 
                 {loading ? <>
                     <div class="spinner-3"></div>
                 </> :
-                    <div className='bg-white  h-auto min-w-96 p-4   '>
+                    <div className='bg-white  h-auto w-3/4 p-4 m-4   '>
+
                         <button type='button' className='bg-slate-950 text-white p-4  '
                             onClick={(e) => move_back(e)}
                         >Back</button>
+                        <h1 className='font-bold text-2xl mt-2' >ORDER HISTORY</h1>
                         {displayOrders(orders)}
+
                     </div>
                 }
 

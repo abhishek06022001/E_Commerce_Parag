@@ -1,11 +1,13 @@
 const db = require("../models/index");
 const Order = db.orders;
+const User = db.users;
 const Products = db.products;
 const Product = db.products;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const { where } = require("sequelize");
 // return res.status(200).json({ msg: "endpoint hit" });
 const removeTemp = (path) => {
   fs.unlink(path, (err) => {
@@ -42,6 +44,13 @@ const orderController = {
     try {
       // return res.status(200).json("get ordered called");
       const user_id = req.params.id;
+      const auth_id = req.id;
+      const user = await User.findByPk(auth_id);
+      if (user.role == 0 && auth_id != user_id) {
+        return res
+          .status(400)
+          .json({ success: true, msg: "Unauthenticated redirect... " });
+      }
       const orders = await Order.findAll({
         where: {
           user_id: user_id,
@@ -56,7 +65,7 @@ const orderController = {
         `select * from products inner join orders  on products.id = orders.product_id where user_id=${user_id} 
         order by orders.order_id `
       );
-    
+
       return res.status(200).json({ success: true, msg: result[0] });
       //
     } catch (error) {

@@ -31,15 +31,17 @@
 /*  */
 .individual_prod-light-mode:hover {
   transform: scale(1.05);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.2s ease, box-shadow 0.3s ;
   box-shadow: 3px 3px 10px 10px rgba(50, 50, 50, 0.7);
 }
 
 /* Dark mode hover effect */
 .individual_prod-dark-mode:hover {
   transform: scale(1.05);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
   box-shadow: 3px 3px 10px 10px rgba(185, 204, 230, 0.5);
+ 
 }
 .login,
 .signup {

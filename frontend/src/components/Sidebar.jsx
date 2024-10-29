@@ -23,9 +23,12 @@ function Sidebar() {
             <div
                 className='text-center w-full h-full  md:p-2 lg:p-3 flex flex-col gap-1'
             >
-                <h1 className={`text-lg  lg:p-3 p-1 ${darkMode ? `border border-solid ` : ` bg-slate-200 border border-solid border-black`} `}
+                {/* <h1 className={`text-lg  lg:p-3 p-1 ${darkMode ? `border border-solid ` : ` bg-slate-200 border border-solid border-black`} `}
                     onClick={() => toggleDarkMode()}
-                >Change Theme</h1>
+                >Change Theme</h1> */}
+
+           
+
 
                 <div>
                     <Link to={''}>

@@ -76,7 +76,7 @@ const userController = {
   },
   // for testing normally
   test: async (req, res) => {
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ id: req.id });
   },
   // create user by admin
   create_user: async (req, res) => {

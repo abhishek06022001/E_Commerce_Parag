@@ -210,6 +210,15 @@ function Product() {
                 loading ?
                     <div className='min-h-screen flex flex-col ' >
                         <div className='bg-slate-900 h-14 text-white flex items-center justify-evenly '>
+                            {/* <div>
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" value="" class="sr-only peer" onChange={toggleDarkMode} />
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                    <span class={`${darkMode ? `text-white` : `text-gray-900`}ms-3 text-sm font-medium  pl-1`}
+
+                                    >Change Theme</span>
+                                </label>
+                            </div> */}
                             <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                             <div className='flex items-center gap-5'>
                                 <input type="text" placeholder='search by name'
@@ -241,8 +250,9 @@ function Product() {
                     <>
                         <div className='min-h-screen flex flex-col relative ' >
                             {/* modal hai  */}
-                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${isModalOpen ? "" : "hidden"}`}>
-
+                            <div className={`h-auto w-auto fixed top-1/2 left-1/2 bg-slate-100 -translate-x-1/2 -translate-y-1/2 z-30 p-10
+                                rounded-sm 
+                                ${isModalOpen ? "" : "hidden"}`}>
                                 <div>
                                     {isEdit ?
                                         <>
@@ -254,42 +264,42 @@ function Product() {
                                                     x
                                                 </h1>
                                                 <h1
-                                                    className="text-center font-semibold text-lg mb-7"
-                                                >Edit Product</h1>
+                                                    className="text-center font-bold text-2xl  mb-7"
+                                                >EDIT PRODUCT</h1>
                                                 <form onSubmit={(e) => submit_edited_product(e)}>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="file">Input Image</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3 my-1">
+                                                        <label htmlFor="file" className="font-semibold ">INPUT IMAGE</label>
                                                         <input type="file" name="file" onChange={e => changeProduct(e)}
                                                             ref={fileInput}
                                                         />
                                                     </div>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="name">Enter Name</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3  my-1">
+                                                        <label htmlFor="name" className="font-semibold">Enter Name</label>
                                                         <input type="text" name="name"
                                                             value={product.name}
                                                             onChange={(e) => changeProduct(e)}
-                                                            className="bg-blue-400 p-1" />
+                                                            className=" p-1" />
                                                     </div>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="description">Enter Description</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3  my-1">
+                                                        <label htmlFor="description" className="font-semibold">Enter Description</label>
                                                         <textarea type="text"
                                                             value={product.description}
                                                             rows={5} cols={50}
                                                             onChange={(e) => changeProduct(e)}
-                                                            name="description" className="bg-blue-400 p-1" />
+                                                            name="description" className="bg-slate-300 p-1" />
                                                     </div>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="name">Enter Price</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3  my-1">
+                                                        <label htmlFor="name" className="font-semibold">Enter Price</label>
                                                         <input type="number" name="price"
                                                             value={product.price}
                                                             onChange={(e) => changeProduct(e)}
-                                                            className="bg-blue-400 p-1" />
+                                                            className="p-1" />
                                                     </div>
-                                                    <div className='text-black ' >
-                                                        <select name="category" id="category"
+                                                    <div className='text-black  bg-slate-200 p-3  my-1' >
+                                                        <select name="category" id="category" 
                                                             value={product.category}
                                                             onChange={(e) => changeProduct(e)}
-                                                            className='  ' >
+                                                            className='py-2 rounded-lg font-semibold' >
                                                             <option value="none">Select a category</option>
                                                             <option value="electronics">electronics</option>
                                                             <option value="men's clothing">men's clothing</option>
@@ -317,39 +327,39 @@ function Product() {
                                                     className="text-center font-semibold text-lg mb-7"
                                                 >Create A new Product</h1>
                                                 <form onSubmit={(e) => create_new_product(e)}>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="file">Input Image</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3 my-1">
+                                                        <label htmlFor="file" className="font-semibold" >Input Image</label>
                                                         <input type="file" name="file" onChange={e => changeProduct(e)}
                                                             ref={fileInput}
                                                         />
                                                     </div>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="name">Enter Name</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3 my-1">
+                                                        <label htmlFor="name" className="font-semibold">Enter Name</label>
                                                         <input type="text" name="name"
                                                             value={product.name}
                                                             onChange={(e) => changeProduct(e)}
-                                                            className="bg-blue-400 p-1" />
+                                                            className=" p-1" />
                                                     </div>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="description">Enter Description</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3 my-1">
+                                                        <label htmlFor="description" className="font-semibold">Enter Description</label>
                                                         <textarea type="text"
                                                             value={product.description}
                                                             rows={5} cols={50}
                                                             onChange={(e) => changeProduct(e)}
-                                                            name="description" className="bg-blue-400 p-1" />
+                                                            name="description" className=" p-1" />
                                                     </div>
-                                                    <div className="mb-5 flex justify-between gap-4">
-                                                        <label htmlFor="name">Enter Price</label>
+                                                    <div className="mb-5 flex justify-between gap-4 bg-slate-200 p-3 my-1">
+                                                        <label htmlFor="name" className="font-semibold">Enter Price</label>
                                                         <input type="number" name="price"
                                                             value={product.price}
                                                             onChange={(e) => changeProduct(e)}
-                                                            className="bg-blue-400 p-1" />
+                                                            className=" p-1" />
                                                     </div>
                                                     <div className='text-black ' >
                                                         <select name="category" id="category"
                                                             value={product.category}
                                                             onChange={(e) => changeProduct(e)}
-                                                            className='  ' >
+                                                            className=' bg-slate-200 p-3 my-1 ' >
                                                             <option value="none">Select a category</option>
                                                             <option value="electronics">electronics</option>
                                                             <option value="men's clothing">men's clothing</option>
@@ -369,20 +379,20 @@ function Product() {
                             </div>
 
                             <div className={`h-screen fixed w-screen top-0 left-0 bg-gray-900 bg-opacity-70 z-10  ${(delete_modal || isModalOpen) ? "" : "hidden"}`}> </div>
-                            <div className={`h-auto w-auto absolute top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${delete_modal ? "" : "hidden"}`}>
+                            <div className={`h-auto w-auto fixed top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${delete_modal ? "" : "hidden"}`}>
                                 Do you really want to delete the product ?
                                 <div className="flex gap-5" >
-                                    <button className="p-1 font-semibold border border-solid-black bg-blue-900"
+                                    <button className="p-1 font-semibold border border-solid-black "
                                         onClick={e => delete_product(e)}
                                     >Yes</button>
-                                    <button className="p-1 font-semibold border border-solid-black bg-blue-900"
+                                    <button className="p-1 font-semibold border border-solid-black "
                                         onClick={e => set_is_delete_modal(false)}
                                     >Nope</button>
                                 </div>
                             </div>
 
                             {/* navbar  */}
-                            <div className={` ${darkMode ? `bg-slate-900 text-white` : `bg-white text-black ` } navbar h-14  flex items-center justify-evenly`}>
+                            <div className={` ${darkMode ? `bg-slate-900 text-white` : `bg-white text-black `} navbar h-14  flex items-center justify-evenly`}>
                                 <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                                 <div className='flex items-center gap-5'>
                                     <input type="text" placeholder='search by name'
@@ -390,6 +400,15 @@ function Product() {
                                         onChange={(e) => handleChange(e)}
                                         ref={inputRef}
                                     />
+                                    <div>
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer" onChange={toggleDarkMode} />
+                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                            <span class={`${darkMode ? `text-white` : `text-gray-900`}ms-3 text-sm font-medium  pl-1`}
+
+                                            >Change Theme</span>
+                                        </label>
+                                    </div>
                                     <div className='text-black' >
                                         <select name="category" id="category"
                                             onChange={(e) => handleCategoryChange(e)}
@@ -415,30 +434,28 @@ function Product() {
                                 </div>
                             </div>
                             {/* filtered products ka lists  */}
-                            <div className={`${darkMode ? `bg-slate-800`:`bg-slate-400` } navbar flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-4 gap-4 p-4 cards `} >
+                            <div className={`${darkMode ? `bg-slate-800` : `bg-slate-400`} navbar flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-4 gap-4 p-4 cards `} >
                                 {filteredProducts.map((element) => {
                                     return (
-                                        <div className={`${darkMode ? `bg-slate-800 text-white individual_prod-dark-mode` :`bg-white text-black   individual_prod-light-mode` } navbar  border border-solid  h-max   flex 
+                                        <div className={`${darkMode ? `individual_prod-dark-mode navbar` : `individual_prod-light-mode`}
+                                            bg-white text-black  border border-solid  h-max   flex 
                                         justify-center 
                                         rounded-lg`}
                                             key={element.id}
                                         >
                                             <div className="  flex flex-col justify-center items-center p-3">
                                                 <img
-                                                    className="lg:h-44"
+                                                    className={`md:h-44`}
                                                     src={"http://localhost:8080/" + element.image} alt="" />
                                                 <div
                                                     className="font-medium text-slate-800 "
                                                 >{element.name}</div>
                                                 <div className="text-3xl font-bold">${element.price}</div>
                                                 <div className="flex  gap-1 items-center">
-
-
                                                     {(role == 1)
                                                         ?
                                                         <>
                                                             <Link to={`product/${element.id}`} >
-
                                                                 <button className="text-white p-1 text-sm bg-slate-700 font-semibold border
                                                                 border-solid-black ">View Product</button>
                                                             </Link>
@@ -458,7 +475,6 @@ function Product() {
                                                             </Link>
                                                         </>
                                                     }
-
                                                 </div>
                                             </div>
 

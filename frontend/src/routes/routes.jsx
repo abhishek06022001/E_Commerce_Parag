@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/order_history/:id',
-        element: <Orders />
+        element: <PrivateRoute> <Orders /></PrivateRoute>
       },
     ],
   },
