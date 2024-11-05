@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react'
 const DarkModeContext = createContext();
 function DarkModeProvider({ children }) {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
     function toggleDarkMode() {
         setDarkMode(prev => !prev);
     }

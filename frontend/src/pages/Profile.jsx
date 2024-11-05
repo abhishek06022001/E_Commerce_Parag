@@ -68,7 +68,7 @@ function Profile() {
                 <form onSubmit={(e) => submitForm(e)} method="post" enctype="multipart/form-data">
                     <div className=' gap-9 mx-auto black'  >
                         <img
-                            className="h-52 mx-auto rounded-full  border-4 border-slate-500 "
+                            className="h-52 mx-auto"
                             src={"http://localhost:8080/" + user.image} alt="" />
                         <div>
                             <label htmlFor="file">Change Image</label>

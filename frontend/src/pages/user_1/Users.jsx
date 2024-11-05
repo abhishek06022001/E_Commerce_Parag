@@ -83,9 +83,9 @@ function Users() {
         // delete_user
         e.preventDefault();
         const id = e.currentTarget.id;
-        
+
         try {
-           
+
             const response = await axios.delete(`/api/delete_user/${id}`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -122,6 +122,7 @@ function Users() {
         getUsers();
     }, []);
     return (
+        // <>hey dude</>
         <div className='min-h-screen h-screen  p-11 '>
             {loading ? <>
                 <div class="spinner-3"></div>
