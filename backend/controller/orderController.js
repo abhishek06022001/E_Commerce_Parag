@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const { where } = require("sequelize");
+const { log } = require("console");
 // return res.status(200).json({ msg: "endpoint hit" });
 const removeTemp = (path) => {
   fs.unlink(path, (err) => {
@@ -20,17 +21,18 @@ const orderController = {
       const user_ka_id = parseInt(req.params.id);
       const random_order_id = Math.floor(Math.random() * 1000); //A random order_id which is common for all the products
       // return res.status(200).json({...req.body});
-
       let order_array = req.body;
-
       // return res.status(200).json({...req.body});
       const promises = order_array.map((element) => {
         let order = {
           product_id: element.id,
+          product_price_at_order: element.price,
+          product_name: element.name,
           user_id: user_ka_id,
           quantity: element.quantity,
           order_id: random_order_id,
         };
+        // console.log("the order is", order);
         return order;
       });
       // return res.status(200).json(promises);
@@ -56,17 +58,21 @@ const orderController = {
           user_id: user_id,
         },
       });
-      //   must do await because it is still a promise dude
       let order_history = [];
-      let promises = [];
+      orders.forEach((order) => {
+        order_history.push(order.dataValues);
+      });
+      console.log("The current orders are", order_history);
+
+      //   must do await because it is still a promise dude
 
       // return the quantity from order and product from the id and product table and group them by order and then send
-      const result = await db.sequelize.query(
-        `select * from products inner join orders  on products.id = orders.product_id where user_id=${user_id} 
-        order by orders.order_id `
-      );
+      // const result = await db.sequelize.query(
+      //   `select * from products inner join orders  on products.id = orders.product_id where user_id=${user_id}
+      //   order by orders.order_id `
+      // );
 
-      return res.status(200).json({ success: true, msg: result[0] });
+      return res.status(200).json({ success: true, msg: order_history });
       //
     } catch (error) {
       return res.status(500).json({ msg: error.message });

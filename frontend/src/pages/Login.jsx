@@ -19,7 +19,7 @@ function Login() {
         } else {
             setTimeout(() => {
                 setLoading(false);
-            }, 1000);
+            }, 400);
         }
     }, [bool]);
     const [input, setInput] = useState({

@@ -21,16 +21,11 @@ function useLoggedIn() {
             setIsValid(bool.data.id);
             setLoading(false);
           }, 2000);
-
-
         } else {
           throw new Error();
         }
-
-
       } catch (error) {
-        setTimeout(() => {
-          
+        setTimeout(() => { 
           setIsValid(false);
           setLoading(false);
         }, 2000);

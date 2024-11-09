@@ -24,16 +24,14 @@ function Cart() {
     async function place_order_function(e) {
         e.preventDefault();
         try {
-            const res = await axios.post(`api/submit_order/${id}`, [ ...cart ], {
+            // console.log("the cart is", cart);
+            const res = await axios.post(`api/submit_order/${id}`, [...cart], {
                 headers: {
                     token: ac_token
                 }
             });
-           
-
         } catch (error) {
             console.log("some error", error);
-
         }
         store.dispatch(placeOrder());
         navigate('/');

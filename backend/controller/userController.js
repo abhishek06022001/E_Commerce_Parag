@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const { where } = require("sequelize");
-const { count } = require("console");
+const { count, log } = require("console");
 const userController = {
   // user basic login logout register
   register: async (req, res) => {
@@ -138,10 +138,15 @@ const userController = {
           is_deleted: 0,
         },
       });
-
+      const query = req.query.name;
+      console.log("queryname is ",query);
+      let mini_query = (query ? `AND users.name like '${query}%'`:``);
+      console.log("the mini query is",mini_query);
       const users = await db.sequelize.query(
-        `SELECT * FROM users inner join user_infos on users.id= user_infos.user_id where is_deleted = 0 LIMIT ${limit} offset ${skip} `
+        `SELECT * FROM users inner join user_infos on users.id= user_infos.user_id where is_deleted = 0 ${mini_query} LIMIT ${limit} offset ${skip} `
       );
+      console.log("users are", users);
+      
       return res.status(200).json({ count: count, data: users[0] });
     } catch (error) {
       return res.status(500).json({ msg: error.message });

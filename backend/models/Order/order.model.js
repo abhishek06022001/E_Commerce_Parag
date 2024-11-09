@@ -12,6 +12,12 @@ module.exports = (sequelize, Sequelize) => {
     order_id: {
       type: Sequelize.INTEGER,
     },
+    product_name: {
+      type: Sequelize.STRING,
+    },
+    product_price_at_order: {
+      type: Sequelize.INTEGER,
+    },
   });
   return Order;
 };

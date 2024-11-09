@@ -1,5 +1,6 @@
 # React + Vite
 
+to remove empty lines of space : ^\s\*\n replace by this dude
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

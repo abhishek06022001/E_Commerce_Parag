@@ -14,8 +14,6 @@ function Profile() {
     const fileRef = useRef();
     function editUser(e) {
         let val = e.target.value;
-
-
         if ([e.target.name] == 'file') {
             const file = e.target.files[0];
             setUser({ ...user, file: file });
@@ -54,8 +52,6 @@ function Profile() {
                     token: ac_token
                 }
             });
-
-
             setUser(user.data[0]);
         }
         getUserInfo();

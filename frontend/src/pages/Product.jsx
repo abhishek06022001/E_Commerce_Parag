@@ -222,7 +222,7 @@ function Product() {
                             <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                             <div className='flex items-center gap-5'>
                                 <input type="text" placeholder='search by name'
-                                    className='p-1 pl-2 w-96 rounded-sm' />
+                                    className='p-1 pl-2 w-96 rounded-sm text-black' />
                                 <div className='text-black' >
                                     <select name="category" id="category"
                                         className='rounded-sm text-sm p-1' >
@@ -396,7 +396,7 @@ function Product() {
                                 <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                                 <div className='flex items-center gap-5'>
                                     <input type="text" placeholder='search by name'
-                                        className='p-1 pl-2 w-96 rounded-sm '
+                                        className='p-1 pl-2 w-96 rounded-sm text-black '
                                         onChange={(e) => handleChange(e)}
                                         ref={inputRef}
                                     />

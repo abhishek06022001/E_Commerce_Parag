@@ -21,11 +21,11 @@ function CommonPage() {
                         :
                         null
                 }
-                {/* background color that needs to be changed in theme change */}
-                <div className={` ${darkMode ? `bg-slate-700` :`bg-slate-300` }  h-full flex-1`}>
+                
+                <div className={` ${darkMode ? `bg-slate-700` :`bg-slate-300` } flex-1 h-full  `}>
 
 
-                    <Outlet />
+                    <Outlet  />
 
 
                 </div>
