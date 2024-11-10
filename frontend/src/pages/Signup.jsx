@@ -20,7 +20,7 @@ function Signup() {
         } else {
             setTimeout(() => {
                 setLoading(false);
-            }, 1000);
+            }, 200);
         }
     }, [bool]);
     //  custom hook ends here :) 
@@ -31,7 +31,7 @@ function Signup() {
             setLoading(true);
             setTimeout(() => {
                 navigate('/login');
-            }, 1500);
+            }, 200);
         } catch (error) {
             if (error.status == 400) {
                 alert("User already exists");

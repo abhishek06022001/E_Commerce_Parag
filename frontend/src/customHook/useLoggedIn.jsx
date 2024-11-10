@@ -20,7 +20,7 @@ function useLoggedIn() {
           setTimeout(() => {
             setIsValid(bool.data.id);
             setLoading(false);
-          }, 2000);
+          }, 200);
         } else {
           throw new Error();
         }
@@ -28,7 +28,7 @@ function useLoggedIn() {
         setTimeout(() => { 
           setIsValid(false);
           setLoading(false);
-        }, 2000);
+        }, 200);
       }
 
     }

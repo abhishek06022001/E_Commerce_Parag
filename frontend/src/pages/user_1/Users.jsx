@@ -12,28 +12,36 @@ function Users() {
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
     const [count, setCount] = useState(null);
+    const [del, setDel] = useState(false);
     const ac_token = localStorage.getItem('accessToken');
-    // useRef to link name of
-    useEffect(() => {
-        async function fetchUsers() {
-            // let name = 'Abhi';
-            // fetch the users here for page 1 , or skip is 0
-            console.log("The searched data is", query); 
-            const new_users = await axios.get(`/api/get_users?skip=${page}&name=${query}`, {
+    async function delete_by_id(id) {
+        try {
+            const response = await axios.delete(`/api/delete_user/${id}`, {
                 headers: {
+                    'Content-Type': 'multipart/form-data',
                     token: ac_token
                 }
             });
-            
+            fetchUsers();
+        } catch (error) {
+            alert(error)
+        }
+    }
+    async function fetchUsers() {
+        const new_users = await axios.get(`/api/get_users?skip=${page}&name=${query}`, {
+            headers: {
+                token: ac_token
+            }
+        });
+        console.log("new data is", new_users.data.data);
 
-            setUsers(new_users.data.data);
-            setCount(new_users.data.count);
-        };
+        setUsers(new_users.data.data);
+        setCount(new_users.data.count);
+    };
+    useEffect(() => {
         fetchUsers();
     }, [page, query]);
-    // now write some query changing state here
     return (
-
         <div className='min-h-screen h-auto p-11  '>
             <h1 className='flex justify-between  mb-4' >
                 <span className='text-2xl font-medium text-white  ' >Users Table</span>
@@ -51,10 +59,11 @@ function Users() {
                     <div className='col-span-3 flex justify-center items-center border border-solid border-black bg-slate-300' >EMAIL</div>
                     <div className='col-span-2 flex justify-center items-center border border-solid border-black bg-slate-300' >ACTIONS</div>
                 </div>
-                {users.map((user, index) => {
-                    return <UserEntry index={index + 1} user={user} page={page} />
+                {users && users.map((user, index) => {
+                    return <UserEntry key={user.id}
+                        setUsers={setUsers} users={users}
+                        index={index + 1} user={user} page={page} delete_by_id={delete_by_id} />
                 })}
-
             </div>
             <div className='flex justify-center ' >
                 <Pagination_new count={count} page={page} setPage={setPage} />

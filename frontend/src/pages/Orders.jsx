@@ -36,13 +36,13 @@ function Orders() {
                     setLoading(false);
                     setOrders(order_history);
                     console.log("The order history is ", order_history);
-                }, 1000);
+                }, 100);
             } catch (error) {
                 setTimeout(() => {
                     setLoading(false);
                     navigate('/');
                     console.log("The order history is ", order_history);
-                }, 1000);
+                }, 100);
             }
         }
         getOrders();

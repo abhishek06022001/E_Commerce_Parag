@@ -54,7 +54,7 @@ function Product() {
         setTimeout(() => {
             setProducts(fetched_products);
             setLoading(false);
-        }, 1200);
+        }, 200);
     }, []);
     async function handleChange(e) {
         let filter_name = e.target.value.toLowerCase();
