@@ -20,9 +20,8 @@ function Orders() {
                     }
                 });
                 // console.log("the orders are", orders.data.msg);
-
                 let res = orders.data.msg;
-                // console.log(res);
+                console.log("result is", res);
                 let order_history = {};
                 res.forEach(element => {
                     if (order_history[element['order_id']]) {
@@ -49,9 +48,9 @@ function Orders() {
     }, [id]);
     function displayOrders(obj) {
         let ans = [];
-        let total = 0;
-        for (let key in obj) {
+        for (let key of Object.keys(obj).reverse()) {
             let date = null;
+            let total = 0;
             ans.push(<div className='bg-slate-700 rounded-lg h-auto mt-4 p-3 text-white' >
                 <div>Order Date : {obj[key][0]['createdAt'].substring(0, 10)}</div>
                 <div className='grid grid-cols-3 gap-1'>

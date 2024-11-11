@@ -33,8 +33,6 @@ function Users() {
                 token: ac_token
             }
         });
-        console.log("new data is", new_users.data.data);
-
         setUsers(new_users.data.data);
         setCount(new_users.data.count);
     };
