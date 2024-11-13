@@ -10,12 +10,9 @@ function ProductComponent() {
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(0);
   const { id } = useParams();
-
-
   const navigate = useNavigate();
   const { role } = useSelector(state => state.users_store_reducer);
   const { cart } = useSelector(state => state.cart_reducer);
-
   const ac_token = localStorage.getItem('accessToken');
   function add(product) {
     setQuantity(prev => prev + 1);
@@ -26,7 +23,6 @@ function ProductComponent() {
 
     store.dispatch(removeFromCart(product));
   }
-
   useEffect(() => {
     async function getProduct() {
       try {

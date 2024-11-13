@@ -8,7 +8,6 @@ import { DarkModeContext } from '../Context/DarkModeContext';
 function Sidebar() {
     const { role, id } = useSelector(state => state.users_store_reducer);
     const user_info = useSelector(state => state.users_store_reducer);
-
     const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const is_logged_in = localStorage.getItem('accessToken');
     const navigate = useNavigate('');
@@ -23,13 +22,6 @@ function Sidebar() {
             <div
                 className='text-center w-full h-full  md:p-2 lg:p-3 flex flex-col gap-1'
             >
-                {/* <h1 className={`text-lg  lg:p-3 p-1 ${darkMode ? `border border-solid ` : ` bg-slate-200 border border-solid border-black`} `}
-                    onClick={() => toggleDarkMode()}
-                >Change Theme</h1> */}
-
-           
-
-
                 <div>
                     <Link to={''}>
                         <h1 className={`text-lg  lg:p-3 p-1 ${darkMode ? `border border-solid ` : ` bg-slate-200 border border-solid border-black`} `}>Products Listing</h1>

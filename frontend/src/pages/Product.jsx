@@ -4,20 +4,26 @@ import axios from "axios";
 import { Link } from 'react-router-dom'
 import { useSelector } from "react-redux"
 import { DarkModeContext } from '../Context/DarkModeContext'
+import Product_pagination from "../components/Product_pagination";
 function Product() {
     const [products, setProducts] = useState(false);
+    const [query, setQuery] = useState(null);
     const [filteredProducts, setFilteredProducts] = useState(false);
     const [loading, setLoading] = useState(true); const inputRef = useRef();
-    const [category, setCategory] = useState(null);
+    const [category, setCategory] = useState("none");
     const { role } = useSelector(state => state.users_store_reducer);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [delete_id, setDelete_id] = useState(null);
     const [delete_modal, set_is_delete_modal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    ;
+
     const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const [product, setProduct] = useState({
         file: ''
     });
+    const [page, setPage] = useState(1);
+    const [count, setCount] = useState();
     const fileInput = useRef();
     function changeProduct(e) {
         let property = e.target.name;
@@ -27,55 +33,32 @@ function Product() {
             setProduct({ ...product, [e.target.name]: e.target.value });
         }
     }
-    async function fetchProducts() {
-        let ans_arr = await axios.get('/api/get_products');
-        fetched_products = ans_arr.data.msg;
-        setProducts(fetched_products);
-        setFilteredProducts(fetched_products);
-    }
-    // Reducer logic here 
-    function handleCategoryChange(e) {
-        if (e.target.value == "none") {
-            inputRef.current.value = '';
-            setCategory(null);
-            setFilteredProducts(products);
-        } else {
-            let new_arr = products.filter((product) => {
-                return (product.category == e.target.value) ? product : false;
-            });
-            inputRef.current.value = '';
-            setCategory(e.target.value);
-            setFilteredProducts(new_arr);
+    async function fetchProducts(query = '') {
+        // get only by page here 
+        try {
+            const categoryQuery = `&category=${category}`;
+            let ans_arr = await axios.get(`/api/get_products?${categoryQuery}&name=${query}&skip=${page}`);
+            setProducts(ans_arr.data.msg);
+            setCount(ans_arr.data.total_products);
+            setFilteredProducts(ans_arr.data.msg);
+        } catch (error) {
+            console.log(error);
         }
+    } // Reducer logic here 
+    async function handleCategoryChange(e) {
+
+        setCategory(e.target.value);
     }
-    let fetched_products = '';
     useEffect(() => {
         fetchProducts();
         setTimeout(() => {
-            setProducts(fetched_products);
             setLoading(false);
         }, 200);
-    }, []);
+    }, [category,page]);
     async function handleChange(e) {
         let filter_name = e.target.value.toLowerCase();
-        if (filter_name == '') {
-            let new_arr = products.filter((product) => {
-                if (category) {
-                    return (product.category == (category)) ? product : false;
-                }
-                return product;
-            });
-
-            // inputRef.current.value = '';
-            setFilteredProducts(new_arr);
-        } else {
-            let filter_array = filteredProducts.filter((product) => {
-                if (((product.name.toLowerCase()).startsWith(filter_name))) {
-                    return product;
-                }
-            });
-            setFilteredProducts(filter_array);
-        }
+        setQuery(filter_name);
+        fetchProducts(filter_name);
     }
     function openModal(e) {
         if (e.target.name == 'create_product') {
@@ -129,6 +112,8 @@ function Product() {
             setFilteredProducts(updated_product_array);
             setProducts(updated_product_array_main);
             setIsModalOpen(false);
+            fetchProducts();
+            inputRef.current.value = '';
         } catch (error) {
             alert("some error while Editing product , please try again ...")
         }
@@ -195,7 +180,8 @@ function Product() {
             setProducts(new_arr1);
             setFilteredProducts(new_arr);
             set_is_delete_modal(false);
-
+            fetchProducts();
+            inputRef.current.value = '';
         } catch (error) {
             console.log(error.message);
         }
@@ -210,15 +196,6 @@ function Product() {
                 loading ?
                     <div className='min-h-screen flex flex-col ' >
                         <div className='bg-slate-900 h-14 text-white flex items-center justify-evenly '>
-                            {/* <div>
-                                <label class="inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer" onChange={toggleDarkMode} />
-                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                    <span class={`${darkMode ? `text-white` : `text-gray-900`}ms-3 text-sm font-medium  pl-1`}
-
-                                    >Change Theme</span>
-                                </label>
-                            </div> */}
                             <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                             <div className='flex items-center gap-5'>
                                 <input type="text" placeholder='search by name'
@@ -228,7 +205,7 @@ function Product() {
                                         className='rounded-sm text-sm p-1' >
                                         <option value="none">Select a category</option>
                                         <option value="electronics">electronics</option>
-                                        <option value="men's clothing">men's clothing</option>
+                                        <option value="mens">mens</option>
                                         <option value="jewelery">jewelery</option>
                                     </select>
                                 </div>
@@ -238,9 +215,7 @@ function Product() {
                                     <div className='relative' >
                                         <FaShoppingCart className='w-8' />
                                     </div>
-
                                 </>}
-
                             </div>
                         </div>
                         <div className=' flex flex-1 justify-center items-center'>
@@ -296,13 +271,13 @@ function Product() {
                                                             className="p-1" />
                                                     </div>
                                                     <div className='text-black  bg-slate-200 p-3  my-1' >
-                                                        <select name="category" id="category" 
+                                                        <select name="category" id="category"
                                                             value={product.category}
                                                             onChange={(e) => changeProduct(e)}
                                                             className='py-2 rounded-lg font-semibold' >
                                                             <option value="none">Select a category</option>
                                                             <option value="electronics">electronics</option>
-                                                            <option value="men's clothing">men's clothing</option>
+                                                            <option value="mens">men's clothing</option>
                                                             <option value="jewelery">jewelery</option>
                                                         </select>
                                                     </div>
@@ -377,7 +352,6 @@ function Product() {
                                 </div>
 
                             </div>
-
                             <div className={`h-screen fixed w-screen top-0 left-0 bg-gray-900 bg-opacity-70 z-10  ${(delete_modal || isModalOpen) ? "" : "hidden"}`}> </div>
                             <div className={`h-auto w-auto fixed top-1/2 left-1/2 bg-white  -translate-x-1/2 -translate-y-1/2 z-30 p-10 ${delete_modal ? "" : "hidden"}`}>
                                 Do you really want to delete the product ?
@@ -390,8 +364,6 @@ function Product() {
                                     >Nope</button>
                                 </div>
                             </div>
-
-                            {/* navbar  */}
                             <div className={` ${darkMode ? `bg-slate-900 text-white` : `bg-white text-black `} navbar h-14  flex items-center justify-evenly`}>
                                 <div className='text-xl font-mono font-semibold' >PRODUCTS</div>
                                 <div className='flex items-center gap-5'>
@@ -401,13 +373,6 @@ function Product() {
                                         ref={inputRef}
                                     />
                                     <div>
-                                        {/* <label class="inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" value="" class="sr-only peer" onChange={toggleDarkMode} />
-                                            <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                            <span class={`${darkMode ? `text-white` : `text-gray-900`}ms-3 text-sm font-medium  pl-1`}
-
-                                            >Change Theme</span>
-                                        </label> */}
                                     </div>
                                     <div className='text-black' >
                                         <select name="category" id="category"
@@ -415,7 +380,7 @@ function Product() {
                                             className='rounded-sm text-sm p-1' >
                                             <option value="none">Select a category</option>
                                             <option value="electronics">electronics</option>
-                                            <option value="men's clothing">men's clothing</option>
+                                            <option value="mens">men's clothing</option>
                                             <option value="jewelery">jewelery</option>
                                         </select>
                                     </div>
@@ -433,7 +398,6 @@ function Product() {
                                     </>}
                                 </div>
                             </div>
-                            {/* filtered products ka lists  */}
                             <div className={`${darkMode ? `bg-slate-800` : `bg-slate-400`} navbar flex-1 grid md:grid-cols-2  sm:grid-cols-1 lg:grid-cols-4 gap-4 p-4 cards `} >
                                 {filteredProducts.map((element) => {
                                     return (
@@ -483,6 +447,7 @@ function Product() {
                                 })}
 
                             </div>
+                            <Product_pagination count={count} page={page} setCount={setCount} setPage={setPage} />
                         </div>
                     </>
             }

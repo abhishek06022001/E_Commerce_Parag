@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import Pagination from '../../components/Pagination'
+
 import axios from 'axios';
 import { FaUserEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -24,7 +24,7 @@ function Users() {
             });
             fetchUsers();
         } catch (error) {
-            alert(error)
+            alert(error);
         }
     }
     async function fetchUsers() {

@@ -2,12 +2,9 @@ import axios from 'axios';
 import React, { useRef, useState } from 'react'
 import { FaUserEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-
 function UserEntry({ user, index, page, delete_by_id, setUsers, users }) {
     const [edit, setEditModal] = useState(false);
     const segmented_users = users;
-   
-
     const ac_token = localStorage.getItem('accessToken');
     const [delete_modal, setDeleteModal] = useState(false);
     const [editUserInfo, setEditUser] = useState(user);

@@ -64,8 +64,38 @@ const productController = {
   },
   get_products: async (req, res) => {
     try {
-      const products = await Products.findAll({ where: { is_deleted: 0 } });
-      return res.status(200).json({ success: true, msg: products });
+      const limit = 6;
+      const skip = (parseInt(req.query.skip) - 1) * 6 || 0;
+
+      const count = await Products.count({
+        where: {
+          is_deleted: 0,
+        },
+      });
+
+      const query = req.query.name;
+      const category = req.query.category;
+
+      let mini_query = query ? `AND products.name like '${query}%'` : ``;
+
+      let category_query =
+        category == "none" ? `` : `AND products.category = '${category}'`;
+
+      const products = await db.sequelize.query(
+        `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} LIMIT ${limit} offset ${skip} `
+      );
+      const total_products = await db.sequelize.query(
+        `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} `
+      );
+
+      console.log("products are ", products[0]);
+
+      return res.status(200).json({
+        success: true,
+        msg: products[0],
+        count: count,
+        total_products: total_products[0].length,
+      });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
     }
@@ -75,6 +105,7 @@ const productController = {
       const products = await Products.findOne({
         where: { is_deleted: 0, id: req.params.id },
       });
+
       return res.status(200).json({ success: true, msg: products });
     } catch (error) {
       return res.status(500).json({ msg: error.message });
