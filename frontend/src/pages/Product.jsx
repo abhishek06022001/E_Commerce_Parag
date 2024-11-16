@@ -7,7 +7,7 @@ import { DarkModeContext } from '../Context/DarkModeContext'
 import Product_pagination from "../components/Product_pagination";
 function Product() {
     const [products, setProducts] = useState(false);
-    const [query, setQuery] = useState(null);
+    const [query, setQuery] = useState('');
     const [filteredProducts, setFilteredProducts] = useState(false);
     const [loading, setLoading] = useState(true); const inputRef = useRef();
     const [category, setCategory] = useState("none");
@@ -16,8 +16,6 @@ function Product() {
     const [delete_id, setDelete_id] = useState(null);
     const [delete_modal, set_is_delete_modal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    ;
-
     const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
     const [product, setProduct] = useState({
         file: ''
@@ -33,20 +31,22 @@ function Product() {
             setProduct({ ...product, [e.target.name]: e.target.value });
         }
     }
-    async function fetchProducts(query = '') {
+    async function fetchProducts() {
         // get only by page here 
         try {
             const categoryQuery = `&category=${category}`;
             let ans_arr = await axios.get(`/api/get_products?${categoryQuery}&name=${query}&skip=${page}`);
+            console.log("the showing products are", ans_arr.data.msg);
+
             setProducts(ans_arr.data.msg);
             setCount(ans_arr.data.total_products);
+
             setFilteredProducts(ans_arr.data.msg);
         } catch (error) {
             console.log(error);
         }
     } // Reducer logic here 
     async function handleCategoryChange(e) {
-
         setCategory(e.target.value);
     }
     useEffect(() => {
@@ -54,11 +54,12 @@ function Product() {
         setTimeout(() => {
             setLoading(false);
         }, 200);
-    }, [category,page]);
+    }, [category, page,query]);
     async function handleChange(e) {
         let filter_name = e.target.value.toLowerCase();
         setQuery(filter_name);
-        fetchProducts(filter_name);
+        setPage(1);
+        // fetchProducts(filter_name);
     }
     function openModal(e) {
         if (e.target.name == 'create_product') {
