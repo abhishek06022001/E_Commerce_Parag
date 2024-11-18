@@ -77,18 +77,15 @@ const productController = {
       const category = req.query.category;
 
       let mini_query = query == '' ? `` : `AND products.name like '${query}%'`;
-      console.log("mini query is", mini_query);
-
+     
       let category_query =
         category == "none" ? `` : `AND products.category = '${category}'`;
-
       const products = await db.sequelize.query(
         `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} LIMIT ${limit} offset ${skip} `
       );
       const total_products = await db.sequelize.query(
         `SELECT * FROM products where is_deleted = 0  ${category_query}  ${mini_query} `
       );
-
       return res.status(200).json({
         success: true,
         msg: products[0],

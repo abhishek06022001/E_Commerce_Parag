@@ -177,7 +177,6 @@ function Product() {
                 }
 
             });
-
             setProducts(new_arr1);
             setFilteredProducts(new_arr);
             set_is_delete_modal(false);
@@ -291,7 +290,6 @@ function Product() {
                                         </>
                                         :
                                         <>
-
                                             <div className="" >
                                                 <h1
                                                     onClick={(e) => closeModal()}
@@ -346,7 +344,6 @@ function Product() {
                                                         Submit
                                                     </button>
                                                 </form>
-
                                             </div>
                                         </>
                                     }
