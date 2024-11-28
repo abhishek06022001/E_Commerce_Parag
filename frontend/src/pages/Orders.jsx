@@ -4,13 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom'
 function Orders() {
     const { id } = useParams();
     const ac_token = localStorage.getItem('accessToken');
-    const [orders, setOrders] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [orders, setOrders] = useState({
+        orders: [], loading: true
+    });
     const navigate = useNavigate();
     function move_back(e) {
         e.preventDefault();
         navigate('/');
     }
+    console.log("rendered again ?");
+
     useEffect(() => {
         async function getOrders() {
             try {
@@ -19,70 +22,49 @@ function Orders() {
                         token: ac_token
                     }
                 });
-                // console.log("the orders are", orders.data.msg);
-                let res = orders.data.msg;
-                console.log("result is", res);
-                let order_history = {};
-                res.forEach(element => {
-                    if (order_history[element['order_id']]) {
-                        order_history[element['order_id']].push(element);
-                    } else {
-                        order_history[element['order_id']] = [];
-                        order_history[element['order_id']].push(element);
-                    }
-                });
                 setTimeout(() => {
-                    setLoading(false);
-                    setOrders(order_history);
-                    console.log("The order history is ", order_history);
+                    setOrders({ loading: false, orders: orders.data.msg });
                 }, 100);
             } catch (error) {
                 setTimeout(() => {
-                    setLoading(false);
-                    navigate('/');
+                    setOrders({ loading: true, orders: null });
                     console.log("The order history is ", order_history);
                 }, 100);
             }
         }
         getOrders();
     }, [id]);
-    function displayOrders(obj) {
-        let ans = [];
-        for (let key of Object.keys(obj).reverse()) {
-            let date = null;
-            let total = 0;
-            ans.push(<div className='bg-slate-700 rounded-lg h-auto mt-4 p-3 text-white' >
-                <div>Order Date : {obj[key][0]['createdAt'].substring(0, 10)}</div>
-                <div className='grid grid-cols-3 gap-1'>
-                    <div className='bg-slate-600 p-3 rounded-sm'>Name</div>
-                    <div className='bg-slate-600 p-3 rounded-sm'>Price</div>
-                    <div className='bg-slate-600 p-3 rounded-sm'>Quantity</div>
-                </div>
-                {obj[key].map((element) => {
-                    total += element.quantity * element.product_price_at_order;
-                    return <div className='grid grid-cols-3 gap-1 mt-1'>
-                        <div className='bg-slate-600 p-1 pl-3 rounded-sm' >{element.product_name}</div>
-                        <div className='bg-slate-600 p-1 pl-3 rounded-sm' >${element.product_price_at_order}</div>
-                        <div className='bg-slate-600 p-1 pl-3 rounded-sm' >{element.quantity}</div>
-                    </div>
-                })}
-                <div>Total : ${total}</div>
-            </div>);
-        }
-        return <>{ans}</>;
-    }
     return (
         <>
             <div className='min-h-screen flex flex-col justify-center items-center relative  p-3' >
-                {loading ? <>
+                {orders.loading ? <>
                     <div class="spinner-3"></div>
                 </> :
-                    <div className='bg-white  h-auto w-3/4 p-4 m-4   '>
-                        <button type='button' className='bg-slate-950 text-white p-4  '
-                            onClick={(e) => move_back(e)}
-                        >Back</button>
-                        <h1 className='font-bold text-2xl mt-2' >ORDER HISTORY</h1>
-                        {displayOrders(orders)}
+                    <div className='bg-white h-auto w-3/4 p-4 m-4'>
+                        <button type='button' className='bg-slate-950 text-white p-4' onClick={(e) => move_back(e)}>Back</button>
+                        <h1 className='font-bold text-2xl mt-2'>ORDER HISTORY</h1>
+                        {console.log(orders.orders)}
+                        <h1>{orders.orders[0][0].id}</h1>
+                        {orders.orders.map((order_array, index) => {
+
+                            if (!order_array) {
+                                return null;
+                            }
+                            let order_total = 0;
+                            return <div className='bg-purple-400 p-1 my-1'>
+                                {order_array?.map(order => {
+                                    order_total += order.product_price_at_order * order.quantity;
+                                    return <div className='bg-red-600 flex gap-3  p-1 ' >
+                                        {order.product_name}
+                                        {order.product_price_at_order}
+                                        quantity is {order.quantity}
+                                    </div>
+                                })}
+                                <div className='bg-slate-300 p-4 text-black' >Total {order_total} </div>
+                            </div>
+                        }
+                            // <div className='bg-red-600 my-1 p-1' >hey</div>
+                        )}
                     </div>
                 }
             </div >

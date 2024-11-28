@@ -1,15 +1,13 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
 app.use(cors());
-
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
+
 dotenv.config();
-app.use(bodyParser());
+
 // app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
@@ -23,7 +21,6 @@ app.use("/api", require("./routes/users/user.route"));
 app.use("/api", require("./routes/products/product.route"));
 app.use("/api", require("./routes/order/order.route"));
 // app.use(express.static("public")); // serve static files
-
 // sql connection for the project
 const db = require("./models/index");
 

@@ -66,13 +66,11 @@ const productController = {
     try {
       const limit = 6;
       const skip = (parseInt(req.query.skip) - 1) * 6 || 0;
-
       const count = await Products.count({
         where: {
           is_deleted: 0,
         },
       });
-
       const query = req.query.name;
       const category = req.query.category;
 

@@ -8,7 +8,6 @@ function useLoggedIn() {
   const { id } = useParams();
   useEffect(() => {
     async function Check() {
-
       const token = localStorage.getItem('accessToken');
       try {
         const bool = await axios.get('/api/test', {

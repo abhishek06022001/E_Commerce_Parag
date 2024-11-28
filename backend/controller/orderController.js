@@ -62,14 +62,19 @@ const orderController = {
         where: {
           user_id: user_id,
         },
-       
       });
       let order_history = [];
       orders.forEach((order) => {
-        order_history.push(order.dataValues);
+        let key = order.dataValues["order_id"];
+        if (!order_history[key]) {
+          order_history[key] = [];
+        }
+        order_history[key].push(order);
       });
 
-      return res.status(200).json({ success: true, msg: order_history });
+      return res
+        .status(200)
+        .json({ success: true, msg: order_history.reverse() });
       //
     } catch (error) {
       return res.status(500).json({ msg: error.message });
